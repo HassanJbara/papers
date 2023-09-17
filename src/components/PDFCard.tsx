@@ -1,5 +1,6 @@
 import type { Paper } from "@/types";
 import { getTagColor } from "@/utils";
+
 import { Link } from "wouter";
 
 interface Props {
@@ -11,7 +12,11 @@ export function PDFCard(props: Props) {
     <div className="card card-compact w-full bg-base-300 text-neutral-content">
       <div className="card-body items-center text-center">
         <Link href={"/pdf/" + props.paper.id}>
-          <h2 className="card-title text-2xl w-fit">{props.paper.title}</h2>
+          <a className="w-full flex flex-col">
+            <h2 className="card-title text-2xl self-center">
+              {props.paper.title}
+            </h2>
+          </a>
         </Link>
         {/* <p className="capitalize">{{ paper.description }}</p> */}
 

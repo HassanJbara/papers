@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   PdfLoader,
   PdfHighlighter,
@@ -17,11 +17,6 @@ import { PAPERS } from "@/papers";
 interface Props {
   pdfId: string;
 }
-
-const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021.pdf";
-
-const searchParams = new URLSearchParams(document.location.search);
-const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
 
 const HighlightPopup = ({
   comment,
@@ -65,7 +60,6 @@ function updateHighlight(
 }
 
 export function PDFPage(pdfId: Props) {
-  const [url, setUrl] = useState(initialUrl);
   const { highlights, setHighlights, addHighlight, getHighlightById } =
     usePDFStore((state) => state);
   const { resetHash, parseIdFromHash, getNewId } = usePDF();
