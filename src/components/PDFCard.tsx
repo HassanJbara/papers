@@ -22,7 +22,7 @@ export function PDFCard(props: Props) {
         <div className="card-actions justify-end items-center flex flex-row mt-4">
           {props.paper.tags.map((tag) => (
             <div
-              className={"badge badge-lg badge-outline p-2 " + tag.color}
+              className={"p-2 badge badge-lg badge-outline badge-" + tag.color}
               key={tag.id}
             >
               {tag.name}

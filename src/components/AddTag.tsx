@@ -4,7 +4,7 @@ import { usePDFStore } from "@/stores";
 import { getNewId, getTagColor } from "@/utils";
 
 export function AddTag() {
-  const { addTag } = usePDFStore((state) => state);
+  const { addTag, resetTags } = usePDFStore((state) => state);
   const [tagName, setTagName] = useState("");
   const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTagName(e.target.value);
@@ -31,7 +31,11 @@ export function AddTag() {
             })
           }
         >
-          Add Tag
+          Add
+        </button>
+
+        <button className="btn btn-error" onClick={resetTags}>
+          Reset
         </button>
 
         <form method="dialog">

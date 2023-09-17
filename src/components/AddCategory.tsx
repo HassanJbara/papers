@@ -4,7 +4,7 @@ import { usePDFStore } from "@/stores";
 import { getNewId } from "@/utils";
 
 export function AddCategory() {
-  const { addCategory } = usePDFStore((state) => state);
+  const { addCategory, resetCategories } = usePDFStore((state) => state);
   const [categoryName, setCategoryName] = useState("");
   const changeCategoryName = (e: React.ChangeEvent<HTMLInputElement>) =>
     setCategoryName(e.target.value);
@@ -27,7 +27,11 @@ export function AddCategory() {
             addCategory({ id: parseInt(getNewId()), name: categoryName })
           }
         >
-          Add Category
+          Add
+        </button>
+
+        <button className="btn btn-error" onClick={resetCategories}>
+          Reset
         </button>
 
         <form method="dialog">

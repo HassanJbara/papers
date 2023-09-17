@@ -13,6 +13,9 @@ interface PDFStoreState {
   addCategory: (category: Category) => void;
   setTags: (tags: Tag[]) => void;
   addTag: (tag: Tag) => void;
+  resetCategories: () => void;
+  resetTags: () => void;
+  resetPapers: () => void;
   resetState: () => void;
 }
 
@@ -33,6 +36,9 @@ const usePDFStore = create<PDFStoreState>()(
           set((state) => ({ categories: [...state.categories, category] })),
         setTags: (tags: Tag[]) => set({ tags }),
         addTag: (tag: Tag) => set((state) => ({ tags: [...state.tags, tag] })),
+        resetCategories: () => set({ categories: [] }),
+        resetTags: () => set({ tags: [] }),
+        resetPapers: () => set({ papers: [] }),
         resetState: () => set({ papers: [], categories: [], tags: [] }),
       }),
       {

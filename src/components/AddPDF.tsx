@@ -4,7 +4,7 @@ import { usePDFStore } from "@/stores";
 import { getNewId } from "@/utils";
 
 export function AddPDF() {
-  const { tags, categories, addPaper, resetState } = usePDFStore(
+  const { tags, categories, addPaper, resetPapers } = usePDFStore(
     (state) => state
   );
   const [title, setTitle] = useState("");
@@ -90,15 +90,15 @@ export function AddPDF() {
             })
           }
         >
-          Add PDF
+          Add
+        </button>
+
+        <button className="btn btn-error mx-2" onClick={resetPapers}>
+          Reset
         </button>
 
         <form method="dialog">
           <button className="btn btn-warning">Cancel</button>
-
-          <button className="btn btn-warning" onClick={resetState}>
-            Remove All PDF Files
-          </button>
           {/* if there is a button in form, it will close the modal */}
         </form>
       </div>
