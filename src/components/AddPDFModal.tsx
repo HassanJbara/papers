@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AddCategory, AddPDF, AddTag } from "@/components";
 
 interface Props {
   id: string;
 }
 
 export function AddPDFModal(props: Props) {
+  const [activeTab, setActiveTab] = useState(0);
   const modal = useRef<HTMLDialogElement | null>(null);
 
   function openModal() {
@@ -27,19 +29,39 @@ export function AddPDFModal(props: Props) {
       </button>
 
       <dialog id={props.id} className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Add a New PDF</h3>
+        <div className="modal-box w-full flex flex-col">
+          <div className="tabs tabs-boxed w-fit self-center">
+            <a
+              className={
+                "text-xl tab tab-lg " + (activeTab === 0 ? "tab-active" : "")
+              }
+              onClick={() => setActiveTab(0)}
+            >
+              Add a PDF
+            </a>
 
-          <p className="py-4">
-            Press ESC key or click the button below to close
-          </p>
+            <a
+              className={
+                "text-xl tab tab-lg " + (activeTab === 1 ? "tab-active" : "")
+              }
+              onClick={() => setActiveTab(1)}
+            >
+              Add a Category
+            </a>
 
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
+            <a
+              className={
+                "text-xl tab tab-lg " + (activeTab === 2 ? "tab-active" : "")
+              }
+              onClick={() => setActiveTab(2)}
+            >
+              Add a Tag
+            </a>
           </div>
+
+          {activeTab === 0 && <AddPDF />}
+          {activeTab === 1 && <AddCategory />}
+          {activeTab === 2 && <AddTag />}
         </div>
       </dialog>
     </>
