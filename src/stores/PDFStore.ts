@@ -1,27 +1,44 @@
-import { IHighlight } from "react-pdf-highlighter";
+import { Category, Paper, Tag } from "@/types";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
 
 interface PDFStoreState {
-  highlights: IHighlight[];
-  setHighlights: (highlights: IHighlight[]) => void;
-  addHighlight: (highlight: IHighlight) => void;
-  getHighlightById: (id: string) => IHighlight | undefined;
+  papers: Paper[];
+  categories: Category[];
+  tags: Tag[];
+  getPaperById: (id: string) => Paper | undefined;
+  addPaper: (paper: Paper) => void;
+  setPapers: (papers: Paper[]) => void;
+  setCategories: (categories: Category[]) => void;
+  addCategory: (category: Category) => void;
+  setTags: (tags: Tag[]) => void;
+  addTag: (tag: Tag) => void;
+  resetState: () => void;
 }
 
 const usePDFStore = create<PDFStoreState>()(
-  persist(
-    (set, get) => ({
-      highlights: [],
-      setHighlights: (highlights: IHighlight[]) => set({ highlights }),
-      addHighlight: (highlight: IHighlight) =>
-        set((state) => ({ highlights: [...state.highlights, highlight] })),
-      getHighlightById: (id: string) =>
-        get().highlights.find((highlight) => highlight.id === id),
-    }),
-    {
-      name: "pdf-store",
-    }
+  devtools(
+    persist(
+      (set, get) => ({
+        papers: [],
+        categories: [],
+        tags: [],
+        getPaperById: (id: string) =>
+          get().papers.find((paper) => paper.id === parseInt(id)),
+        setPapers: (papers: Paper[]) => set({ papers }),
+        addPaper: (paper: Paper) =>
+          set((state) => ({ papers: [...state.papers, paper] })),
+        setCategories: (categories: Category[]) => set({ categories }),
+        addCategory: (category: Category) =>
+          set((state) => ({ categories: [...state.categories, category] })),
+        setTags: (tags: Tag[]) => set({ tags }),
+        addTag: (tag: Tag) => set((state) => ({ tags: [...state.tags, tag] })),
+        resetState: () => set({ papers: [], categories: [], tags: [] }),
+      }),
+      {
+        name: "pdf-store",
+      }
+    )
   )
 );
 
