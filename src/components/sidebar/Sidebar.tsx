@@ -14,9 +14,12 @@ export function Sidebar() {
         ))}
 
         {highlights.length > 0 ? (
-          <div>
-            <button onClick={() => setHighlights([])}>Reset highlights</button>
-          </div>
+          <button
+            className="btn btn-warning w-1/2 self-center"
+            onClick={() => setHighlights([])}
+          >
+            Reset highlights
+          </button>
         ) : null}
       </aside>
     </div>
