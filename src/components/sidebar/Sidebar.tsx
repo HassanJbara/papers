@@ -1,8 +1,8 @@
 import { PDFHighlight } from "@/components/sidebar";
-import { usePDFStore } from "@/stores";
+import { useHighlightsStore } from "@/stores";
 
 export function Sidebar() {
-  const { highlights, setHighlights } = usePDFStore((state) => state);
+  const { highlights, setHighlights } = useHighlightsStore((state) => state);
 
   return (
     <div className="drawer-side z-50 w-fit">

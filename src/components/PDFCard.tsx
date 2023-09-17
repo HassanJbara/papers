@@ -1,5 +1,4 @@
 import type { Paper } from "@/types";
-import { getTagColor } from "@/utils";
 
 import { Link } from "wouter";
 
@@ -23,10 +22,10 @@ export function PDFCard(props: Props) {
         <div className="card-actions justify-end items-center flex flex-row mt-4">
           {props.paper.tags.map((tag) => (
             <div
-              className={"badge badge-lg badge-outline p-2 " + getTagColor(tag)}
-              key={tag}
+              className={"badge badge-lg badge-outline p-2 " + tag.color}
+              key={tag.id}
             >
-              {tag}
+              {tag.name}
             </div>
           ))}
 
