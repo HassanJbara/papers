@@ -12,6 +12,11 @@ import { Spinner, HighlightOptions } from "@/components";
 import { Sidebar } from "@/components/sidebar";
 import { usePDFStore } from "@/stores";
 import { usePDF } from "@/hooks";
+import { PAPERS } from "@/papers";
+
+interface Props {
+  pdfId: string;
+}
 
 const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021.pdf";
 
@@ -59,7 +64,7 @@ function updateHighlight(
   );
 }
 
-export function PDFPage() {
+export function PDFPage(pdfId: Props) {
   const [url, setUrl] = useState(initialUrl);
   const { highlights, setHighlights, addHighlight, getHighlightById } =
     usePDFStore((state) => state);
@@ -75,14 +80,18 @@ export function PDFPage() {
     }
   };
 
+  const paper = PAPERS.find((paper) => paper.id === parseInt(pdfId.pdfId));
+
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
   }, []);
 
-  return (
-    <>
+  return paper ? (
+    <div className="drawer lg:drawer-open">
+      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+
       <div className="drawer-content overflow-y-auto h-full relative">
-        <PdfLoader url={url} beforeLoad={<Spinner />}>
+        <PdfLoader url={paper.paperLink} beforeLoad={<Spinner />}>
           {(pdfDocument) => (
             <PdfHighlighter
               pdfDocument={pdfDocument}
@@ -167,6 +176,6 @@ export function PDFPage() {
       </div>
 
       <Sidebar />
-    </>
-  );
+    </div>
+  ) : null;
 }

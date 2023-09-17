@@ -1,5 +1,6 @@
 import type { Paper } from "@/types";
 import { getTagColor } from "@/utils";
+import { Link } from "wouter";
 
 interface Props {
   paper: Paper;
@@ -9,14 +10,16 @@ export function PDFCard(props: Props) {
   return (
     <div className="card card-compact w-full bg-base-300 text-neutral-content">
       <div className="card-body items-center text-center">
-        <h2 className="card-title text-2xl w-fit">{props.paper.title}</h2>
-
+        <Link href={"/pdf/" + props.paper.id}>
+          <h2 className="card-title text-2xl w-fit">{props.paper.title}</h2>
+        </Link>
         {/* <p className="capitalize">{{ paper.description }}</p> */}
 
         <div className="card-actions justify-end items-center flex flex-row mt-4">
           {props.paper.tags.map((tag) => (
             <div
               className={"badge badge-lg badge-outline p-2 " + getTagColor(tag)}
+              key={tag}
             >
               {tag}
             </div>
