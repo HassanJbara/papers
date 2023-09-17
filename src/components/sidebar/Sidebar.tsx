@@ -1,13 +1,9 @@
-import type { IHighlight } from "react-pdf-highlighter";
 import { PDFHighlight } from "@/components/sidebar";
+import { usePDFStore } from "@/stores";
 
-interface Props {
-  highlights: Array<IHighlight>;
-  resetHighlights: () => void;
-  toggleDocument: () => void;
-}
+export function Sidebar() {
+  const { highlights, setHighlights } = usePDFStore((state) => state);
 
-export function Sidebar({ highlights, resetHighlights }: Props) {
   return (
     <div className="drawer-side z-50 w-fit">
       <label htmlFor="my-drawer" className="drawer-overlay" />
@@ -17,11 +13,11 @@ export function Sidebar({ highlights, resetHighlights }: Props) {
           <PDFHighlight key={index} highlight={highlight} />
         ))}
 
-        {/* {highlights.length > 0 ? (
+        {highlights.length > 0 ? (
           <div>
-            <button onClick={resetHighlights}>Reset highlights</button>
+            <button onClick={() => setHighlights([])}>Reset highlights</button>
           </div>
-        ) : null} */}
+        ) : null}
       </aside>
     </div>
   );
