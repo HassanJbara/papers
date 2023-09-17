@@ -5,14 +5,12 @@ import {
   Highlight,
   Popup,
   AreaHighlight,
-  IHighlight,
 } from "react-pdf-highlighter";
 
 import { Spinner, HighlightOptions } from "@/components";
 import { Sidebar } from "@/components/sidebar";
-import { usePDFStore } from "@/stores";
-import { usePDF } from "@/hooks";
-import { PAPERS } from "@/papers";
+import { useHighlightsStore, usePDFStore } from "@/stores";
+import { getNewId, parseIdFromHash, resetHash, updateHighlight } from "@/utils";
 
 interface Props {
   pdfId: string;
@@ -29,40 +27,10 @@ const HighlightPopup = ({
     </div>
   ) : null;
 
-function updateHighlight(
-  highlightId: string,
-  position: object,
-  content: object,
-  highlights: IHighlight[],
-  setHighlights: (highlights: IHighlight[]) => void
-) {
-  console.log("Updating highlight", highlightId, position, content);
-
-  setHighlights(
-    highlights.map((h) => {
-      const {
-        id,
-        position: originalPosition,
-        content: originalContent,
-        ...rest
-      } = h;
-
-      return id === highlightId
-        ? {
-            id,
-            position: { ...originalPosition, ...position },
-            content: { ...originalContent, ...content },
-            ...rest,
-          }
-        : h;
-    })
-  );
-}
-
 export function PDFPage(pdfId: Props) {
   const { highlights, setHighlights, addHighlight, getHighlightById } =
-    usePDFStore((state) => state);
-  const { resetHash, parseIdFromHash, getNewId } = usePDF();
+    useHighlightsStore((state) => state);
+  const paper = usePDFStore((state) => state.getPaperById(pdfId.pdfId));
 
   const scrollViewerTo = useRef((highlight: any) => {});
 
@@ -73,8 +41,6 @@ export function PDFPage(pdfId: Props) {
       scrollViewerTo.current(highlight);
     }
   };
-
-  const paper = PAPERS.find((paper) => paper.id === parseInt(pdfId.pdfId));
 
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
@@ -171,5 +137,7 @@ export function PDFPage(pdfId: Props) {
 
       <Sidebar />
     </div>
-  ) : null;
+  ) : (
+    <div>pdf not found</div>
+  );
 }

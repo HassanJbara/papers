@@ -1,18 +1,13 @@
-export const tags = [
-  "Score Models",
-  "Generative Models",
-  "Computer Vision",
-  "Training",
-  "Latent Representations",
-] as const;
-export const categories = [
-  "Diffusion Models",
-  "Autoencoders & Transformers",
-] as const;
+export interface Category {
+  id: number;
+  name: string;
+}
 
-export type Tag = (typeof tags)[number];
-
-export type Category = (typeof categories)[number];
+export interface Tag {
+  id: number;
+  name: string;
+  color: string;
+}
 
 export interface Paper {
   id: number;
