@@ -65,7 +65,6 @@ export function PDFPage(props: Props) {
               pdfDocument={pdfDocument}
               enableAreaSelection={(event) => event.altKey}
               onScrollChange={resetHash}
-              pdfScaleValue="page-width"
               scrollRef={(scrollTo) => {
                 scrollViewerTo.current = scrollTo;
 
@@ -144,7 +143,7 @@ export function PDFPage(props: Props) {
         </PdfLoader>
       </div>
 
-      <Sidebar paperId={parseInt(props.pdfId)} />
+      <Sidebar paperId={parseInt(props.pdfId)} title={paper.title} />
     </div>
   ) : (
     <div>pdf not found</div>
