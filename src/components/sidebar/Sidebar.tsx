@@ -20,7 +20,11 @@ export function Sidebar(props: Props) {
         <SidebarHeader title={props.title} />
 
         {highlights.map((highlight, index) => (
-          <PDFHighlight key={index} highlight={highlight} />
+          <PDFHighlight
+            key={index}
+            highlight={highlight}
+            paperId={props.paperId}
+          />
         ))}
         {highlights.length > 0 ? (
           <button

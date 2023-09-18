@@ -9,6 +9,7 @@ interface HighlightsStoreState {
   ) => void;
   addHighlight: (paperId: number, highlight: IHighlight) => void;
   setPaperHighlights: (paperId: number, highlights: IHighlight[]) => void;
+  removeHighlight: (paperId: number, highlightId: string) => void;
   getHighlightById: (
     paperIid: number,
     highlightId: string
@@ -42,6 +43,13 @@ const useHighlightsStore = create<HighlightsStoreState>()(
           ...get().highlights.filter((h) => h.paperId !== paperId),
           { paperId: paperId, highlights: highlights },
         ]),
+      removeHighlight: (paperId: number, highlightId: string) =>
+        get().setPaperHighlights(
+          paperId,
+          get()
+            .getPaperHighlights(paperId)
+            .filter((h) => h.id !== highlightId)
+        ),
       getHighlightById: (paperIid: number, highlightId: string) =>
         get()
           .highlights.find((highlight) => highlight.paperId === paperIid)
