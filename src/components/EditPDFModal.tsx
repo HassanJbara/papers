@@ -28,18 +28,25 @@ export function EditPDFModal(props: Props) {
     modal.current = modal.current = document.querySelector(
       "#" + props.id
     ) as HTMLDialogElement;
-  }, []);
+  });
+
   return (
     <>
-      <button className="btn btn-warning btn-sm" onClick={openModal}>
+      <button
+        title="Edit PDF"
+        className="btn btn-primary btn-sm"
+        onClick={openModal}
+      >
         <ReactSVG
           src="/icons/pen.svg"
-          className="w-5 h-5 text-warning-content fill-current"
+          className="w-5 h-5 text-primary-content fill-current"
         />
       </button>
 
       <dialog id={props.id} className="modal">
         <div className="modal-box w-full flex flex-col">
+          <h3 className="text-2xl font-bold">Edit PDF</h3>
+
           <div className="mt-2">
             <div className="w-full flex flex-col gap-4 py-8">
               <input

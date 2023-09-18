@@ -18,6 +18,7 @@ export function AddPDFModal(props: Props) {
       "#" + props.id
     ) as HTMLDialogElement;
   }, []);
+
   return (
     <>
       <button className="btn btn-md btn-ghost" onClick={openModal}>
@@ -59,9 +60,15 @@ export function AddPDFModal(props: Props) {
             </a>
           </div>
 
-          {activeTab === 0 && <AddPDF />}
-          {activeTab === 1 && <AddCategory />}
-          {activeTab === 2 && <AddTag />}
+          {activeTab === 0 && (
+            <AddPDF closeModal={() => modal.current?.close()} />
+          )}
+          {activeTab === 1 && (
+            <AddCategory closeModal={() => modal.current?.close()} />
+          )}
+          {activeTab === 2 && (
+            <AddTag closeModal={() => modal.current?.close()} />
+          )}
         </div>
       </dialog>
     </>

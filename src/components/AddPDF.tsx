@@ -3,7 +3,11 @@ import { useState } from "react";
 import { usePDFStore } from "@/stores";
 import { getNewId } from "@/utils";
 
-export function AddPDF() {
+interface Props {
+  closeModal: () => void;
+}
+
+export function AddPDF(props: Props) {
   const { tags, categories, addPaper, resetPapers } = usePDFStore(
     (state) => state
   );
@@ -12,7 +16,39 @@ export function AddPDF() {
   const [githubLink, setGithubLink] = useState("");
   const [description, setDescription] = useState("");
   const [tagId, setTagId] = useState<number | null>(null);
-  const [categoryId, setCategoryId] = useState(0);
+  const [categoryId, setCategoryId] = useState(-1);
+
+  function clearFields() {
+    console.log("clearing fields");
+    setTitle("");
+    setPDFLink("");
+    setGithubLink("");
+    setDescription("");
+    setTagId(null);
+    setCategoryId(-1);
+  }
+
+  function add() {
+    addPaper({
+      id: parseInt(getNewId()),
+      title: title,
+      category: categories.find((c) => c.id === categoryId)!,
+      paperLink: pdfLink,
+      githubLink: githubLink,
+      description: description,
+      tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
+    });
+
+    clearFields();
+
+    props.closeModal();
+  }
+
+  function cancel() {
+    clearFields();
+
+    props.closeModal();
+  }
 
   return (
     <div className="mt-2">
@@ -21,6 +57,7 @@ export function AddPDF() {
           type="text"
           placeholder="PDF Title"
           className="input input-bordered w-full"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
@@ -28,6 +65,7 @@ export function AddPDF() {
           type="text"
           placeholder="PDF Link"
           className="input input-bordered w-full"
+          value={pdfLink}
           onChange={(e) => setPDFLink(e.target.value)}
         />
 
@@ -35,20 +73,24 @@ export function AddPDF() {
           type="text"
           placeholder="Github Link (optional)"
           className="input input-bordered w-full"
+          value={githubLink}
           onChange={(e) => setGithubLink(e.target.value)}
         />
 
         <textarea
           className="textarea textarea-bordered w-full"
           placeholder="Description (optional)"
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
         <select
+          title="Pick a Category"
           className="select select-bordered w-full"
           onChange={(e) => setCategoryId(parseInt(e.target.value))}
+          value={categoryId}
         >
-          <option disabled selected>
+          <option disabled value={-1}>
             Pick a Category
           </option>
 
@@ -60,10 +102,12 @@ export function AddPDF() {
         </select>
 
         <select
+          title="Pick Tags"
           className="select select-bordered w-full"
           onChange={(e) => setTagId(parseInt(e.target.value))}
+          value={tagId || -1}
         >
-          <option disabled selected>
+          <option disabled value={-1}>
             Pick Tags
           </option>
 
@@ -76,20 +120,7 @@ export function AddPDF() {
       </div>
 
       <div className="modal-action flex flex-row w-full justify-around">
-        <button
-          className="btn btn-primary"
-          onClick={() =>
-            addPaper({
-              id: parseInt(getNewId()),
-              title: title,
-              category: categories.find((c) => c.id === categoryId)!,
-              paperLink: pdfLink,
-              githubLink: githubLink,
-              description: description,
-              tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
-            })
-          }
-        >
+        <button className="btn btn-primary" onClick={add}>
           Add
         </button>
 
@@ -97,10 +128,9 @@ export function AddPDF() {
           Reset
         </button>
 
-        <form method="dialog">
-          <button className="btn btn-warning">Cancel</button>
-          {/* if there is a button in form, it will close the modal */}
-        </form>
+        <button className="btn btn-warning" onClick={cancel}>
+          Cancel
+        </button>
       </div>
     </div>
   );

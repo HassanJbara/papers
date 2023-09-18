@@ -1,14 +1,39 @@
 import { useState } from "react";
+import { ReactSVG } from "react-svg";
 
 import { usePDFStore } from "@/stores";
 import { getNewId, getTagColor } from "@/utils";
-import { ReactSVG } from "react-svg";
 
-export function AddTag() {
+interface Props {
+  closeModal: () => void;
+}
+
+export function AddTag(props: Props) {
   const { addTag, resetTags, removeTag, tags } = usePDFStore((state) => state);
   const [tagName, setTagName] = useState("");
   const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTagName(e.target.value);
+
+  function clearFields() {
+    setTagName("");
+  }
+
+  function cancel() {
+    clearFields();
+    props.closeModal();
+  }
+
+  function add() {
+    addTag({
+      id: parseInt(getNewId()),
+      name: tagName,
+      color: getTagColor(),
+    });
+
+    clearFields();
+
+    props.closeModal();
+  }
 
   return (
     <div className="mt-2">
@@ -17,6 +42,7 @@ export function AddTag() {
           type="text"
           placeholder="Tag Name"
           className="input input-bordered w-full"
+          value={tagName}
           onChange={changeTagName}
         />
 
@@ -31,6 +57,7 @@ export function AddTag() {
               key={tag.id}
             >
               <button
+                title="Remove Tag"
                 className="btn btn-info btn-sm self-start btn-circle"
                 onClick={() => removeTag(tag.id)}
               >
@@ -49,16 +76,7 @@ export function AddTag() {
       </div>
 
       <div className="modal-action flex flex-row w-full justify-around">
-        <button
-          className="btn btn-primary"
-          onClick={() =>
-            addTag({
-              id: parseInt(getNewId()),
-              name: tagName,
-              color: getTagColor(),
-            })
-          }
-        >
+        <button className="btn btn-primary" onClick={add}>
           Add
         </button>
 
@@ -66,10 +84,9 @@ export function AddTag() {
           Reset
         </button>
 
-        <form method="dialog">
-          <button className="btn btn-warning">Cancel</button>
-          {/* if there is a button in form, it will close the modal */}
-        </form>
+        <button className="btn btn-warning" onClick={cancel}>
+          Cancel
+        </button>
       </div>
     </div>
   );
