@@ -14,19 +14,25 @@ export function MainPage() {
         sometimes my notes.
       </p>
 
-      {categories.map((category) => (
-        <div className="my-6 md:w-1/2 flex flex-col gap-4" key={category.id}>
-          <h2 className="font-semibold text-4xl text-base-content">
-            {category.name}
-          </h2>
+      {categories.map(
+        (category) =>
+          papers.filter((p) => p.category.id === category.id).length > 0 && (
+            <div
+              className="my-6 md:w-1/2 flex flex-col gap-4"
+              key={category.id}
+            >
+              <h2 className="font-semibold text-4xl text-base-content">
+                {category.name}
+              </h2>
 
-          {papers
-            .filter((paper) => paper.category.id === category.id)
-            .map((paper) => (
-              <PDFCard paper={paper} key={paper.id} />
-            ))}
-        </div>
-      ))}
+              {papers
+                .filter((paper) => paper.category.id === category.id)
+                .map((paper) => (
+                  <PDFCard paper={paper} key={paper.id} />
+                ))}
+            </div>
+          )
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { Category, Paper, Tag } from "@/types";
+
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
@@ -6,13 +7,16 @@ interface PDFStoreState {
   papers: Paper[];
   categories: Category[];
   tags: Tag[];
-  getPaperById: (id: string) => Paper | undefined;
-  addPaper: (paper: Paper) => void;
   setPapers: (papers: Paper[]) => void;
+  addPaper: (paper: Paper) => void;
+  removePaper: (paperId: number) => void;
+  getPaperById: (id: string) => Paper | undefined;
   setCategories: (categories: Category[]) => void;
   addCategory: (category: Category) => void;
+  removeCategory: (categoryId: number) => void;
   setTags: (tags: Tag[]) => void;
   addTag: (tag: Tag) => void;
+  removeTag: (tagId: number) => void;
   resetCategories: () => void;
   resetTags: () => void;
   resetPapers: () => void;
@@ -31,11 +35,19 @@ const usePDFStore = create<PDFStoreState>()(
         setPapers: (papers: Paper[]) => set({ papers }),
         addPaper: (paper: Paper) =>
           set((state) => ({ papers: [...state.papers, paper] })),
+        removePaper: (paperId: number) =>
+          get().setPapers(get().papers.filter((paper) => paper.id !== paperId)),
         setCategories: (categories: Category[]) => set({ categories }),
         addCategory: (category: Category) =>
           set((state) => ({ categories: [...state.categories, category] })),
+        removeCategory: (categoryId: number) =>
+          get().setCategories(
+            get().categories.filter((category) => category.id !== categoryId)
+          ),
         setTags: (tags: Tag[]) => set({ tags }),
         addTag: (tag: Tag) => set((state) => ({ tags: [...state.tags, tag] })),
+        removeTag: (tagId: number) =>
+          get().setTags(get().tags.filter((tag) => tag.id !== tagId)),
         resetCategories: () => set({ categories: [] }),
         resetTags: () => set({ tags: [] }),
         resetPapers: () => set({ papers: [] }),

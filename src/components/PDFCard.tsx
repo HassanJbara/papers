@@ -1,23 +1,51 @@
+import { usePDFStore } from "@/stores";
 import type { Paper } from "@/types";
 
 import { Link } from "wouter";
+import { ReactSVG } from "react-svg";
 
 interface Props {
   paper: Paper;
 }
 
 export function PDFCard(props: Props) {
+  const { removePaper } = usePDFStore((state) => state);
+
   return (
     <div className="card card-compact w-full bg-base-300 text-neutral-content">
       <div className="card-body items-center text-center">
-        <Link href={"/pdf/" + props.paper.id}>
-          <a className="w-full flex flex-col">
-            <h2 className="card-title text-2xl self-center">
-              {props.paper.title}
-            </h2>
-          </a>
-        </Link>
-        {/* <p className="capitalize">{{ paper.description }}</p> */}
+        <div className="card-title flex flex-row w-full">
+          <Link href={"/pdf/" + props.paper.id}>
+            <a className="w-full flex flex-col">
+              <h2 className="text-2xl self-center">{props.paper.title}</h2>
+            </a>
+          </Link>
+
+          <div className="card-actions self-end">
+            <div className="flex flex-row gap-2">
+              <button className="btn btn-warning btn-sm">
+                <ReactSVG
+                  src="/icons/pen.svg"
+                  className="w-5 h-5 text-warning-content fill-current"
+                />
+              </button>
+
+              <button
+                className="btn btn-error btn-sm"
+                onClick={() => removePaper(props.paper.id)}
+              >
+                <ReactSVG
+                  src="/icons/x.svg"
+                  className="w-4 h-4 text-error-content fill-current"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {props.paper.description && (
+          <p className="capitalize">{props.paper.description}</p>
+        )}
 
         <div className="card-actions justify-end items-center flex flex-row mt-4">
           {props.paper.tags.map((tag) => (
