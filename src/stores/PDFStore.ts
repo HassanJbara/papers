@@ -10,6 +10,7 @@ interface PDFStoreState {
   setPapers: (papers: Paper[]) => void;
   addPaper: (paper: Paper) => void;
   removePaper: (paperId: number) => void;
+  updatePaper: (paper: Paper) => void;
   getPaperById: (id: string) => Paper | undefined;
   setCategories: (categories: Category[]) => void;
   addCategory: (category: Category) => void;
@@ -35,6 +36,10 @@ const usePDFStore = create<PDFStoreState>()(
         setPapers: (papers: Paper[]) => set({ papers }),
         addPaper: (paper: Paper) =>
           set((state) => ({ papers: [...state.papers, paper] })),
+        updatePaper: (paper: Paper) =>
+          get().setPapers(
+            get().papers.map((p) => (p.id === paper.id ? paper : p))
+          ),
         removePaper: (paperId: number) =>
           get().setPapers(get().papers.filter((paper) => paper.id !== paperId)),
         setCategories: (categories: Category[]) => set({ categories }),

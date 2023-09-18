@@ -1,5 +1,7 @@
 import { usePDFStore } from "@/stores";
 import type { Paper } from "@/types";
+import { EditPDFModal } from "@/components";
+import { getNewId } from "@/utils";
 
 import { Link } from "wouter";
 import { ReactSVG } from "react-svg";
@@ -23,12 +25,7 @@ export function PDFCard(props: Props) {
 
           <div className="card-actions self-end">
             <div className="flex flex-row gap-2">
-              <button className="btn btn-warning btn-sm">
-                <ReactSVG
-                  src="/icons/pen.svg"
-                  className="w-5 h-5 text-warning-content fill-current"
-                />
-              </button>
+              <EditPDFModal paper={props.paper} id={"modal_" + getNewId()} />
 
               <button
                 className="btn btn-error btn-sm"
@@ -75,8 +72,7 @@ export function PDFCard(props: Props) {
                 target="_blank"
               >
                 <button className="btn btn-md btn-ghost z-50">
-                  <img
-                    alt="Github Logo"
+                  <ReactSVG
                     src="/icons/github.svg"
                     className="w-8 h-8 fill-base-content"
                   />
