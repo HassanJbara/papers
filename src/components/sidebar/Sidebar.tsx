@@ -1,8 +1,15 @@
 import { PDFHighlight } from "@/components/sidebar";
 import { useHighlightsStore } from "@/stores";
 
-export function Sidebar() {
-  const { highlights, setHighlights } = useHighlightsStore((state) => state);
+interface Props {
+  paperId: number;
+}
+
+export function Sidebar(props: Props) {
+  const { getPaperHighlights, setPaperHighlights } = useHighlightsStore(
+    (state) => state
+  );
+  const highlights = getPaperHighlights(props.paperId);
 
   return (
     <div className="drawer-side z-50 w-fit">
@@ -16,7 +23,7 @@ export function Sidebar() {
         {highlights.length > 0 ? (
           <button
             className="btn btn-warning w-1/2 self-center"
-            onClick={() => setHighlights([])}
+            onClick={() => setPaperHighlights(props.paperId, [])}
           >
             Reset highlights
           </button>

@@ -27,15 +27,23 @@ const HighlightPopup = ({
     </div>
   ) : null;
 
-export function PDFPage(pdfId: Props) {
-  const { highlights, setHighlights, addHighlight, getHighlightById } =
-    useHighlightsStore((state) => state);
-  const paper = usePDFStore((state) => state.getPaperById(pdfId.pdfId));
+export function PDFPage(props: Props) {
+  const {
+    getPaperHighlights,
+    setPaperHighlights,
+    addHighlight,
+    getHighlightById,
+  } = useHighlightsStore((state) => state);
+  const paper = usePDFStore((state) => state.getPaperById(props.pdfId));
+  const highlights = getPaperHighlights(parseInt(props.pdfId));
 
   const scrollViewerTo = useRef((highlight: any) => {});
 
   const scrollToHighlightFromHash = () => {
-    const highlight = getHighlightById(parseIdFromHash());
+    const highlight = getHighlightById(
+      parseInt(props.pdfId),
+      parseIdFromHash()
+    );
 
     if (highlight) {
       scrollViewerTo.current(highlight);
@@ -72,7 +80,7 @@ export function PDFPage(pdfId: Props) {
                 <HighlightOptions
                   onOpen={transformSelection}
                   onConfirm={(comment) => {
-                    addHighlight({
+                    addHighlight(parseInt(props.pdfId), {
                       content,
                       position,
                       comment,
@@ -107,11 +115,12 @@ export function PDFPage(pdfId: Props) {
                     highlight={highlight}
                     onChange={(boundingRect) => {
                       updateHighlight(
+                        parseInt(props.pdfId),
                         highlight.id,
                         { boundingRect: viewportToScaled(boundingRect) },
                         { image: screenshot(boundingRect) },
                         highlights,
-                        setHighlights
+                        setPaperHighlights
                       );
                     }}
                   />
@@ -135,7 +144,7 @@ export function PDFPage(pdfId: Props) {
         </PdfLoader>
       </div>
 
-      <Sidebar />
+      <Sidebar paperId={parseInt(props.pdfId)} />
     </div>
   ) : (
     <div>pdf not found</div>

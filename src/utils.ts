@@ -28,15 +28,17 @@ export const resetHash = () => {
 export const getNewId = () => String(Math.random()).slice(2);
 
 export function updateHighlight(
+  paperId: number,
   highlightId: string,
   position: object,
   content: object,
   highlights: IHighlight[],
-  setHighlights: (highlights: IHighlight[]) => void
+  setHighlights: (paperId: number, highlights: IHighlight[]) => void
 ) {
   console.log("Updating highlight", highlightId, position, content);
 
   setHighlights(
+    paperId,
     highlights.map((h) => {
       const {
         id,
