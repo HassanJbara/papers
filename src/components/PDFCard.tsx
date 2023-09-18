@@ -28,6 +28,7 @@ export function PDFCard(props: Props) {
               <EditPDFModal paper={props.paper} id={"modal_" + getNewId()} />
 
               <button
+                title="Remove PDF"
                 className="btn btn-error btn-sm"
                 onClick={() => removePaper(props.paper.id)}
               >
@@ -41,7 +42,9 @@ export function PDFCard(props: Props) {
         </div>
 
         {props.paper.description && (
-          <p className="capitalize">{props.paper.description}</p>
+          <p className="capitalize w-full text-left text-lg my-4">
+            {props.paper.description}
+          </p>
         )}
 
         <div className="card-actions justify-end items-center flex flex-row mt-4">
@@ -67,11 +70,15 @@ export function PDFCard(props: Props) {
 
             {props.paper.githubLink ? (
               <a
+                title="GitHub Link"
                 href={props.paper.githubLink}
                 className="join-item"
                 target="_blank"
               >
-                <button className="btn btn-md btn-ghost z-50">
+                <button
+                  title="GitHub Link"
+                  className="btn btn-md btn-ghost z-50"
+                >
                   <ReactSVG
                     src="/icons/github.svg"
                     className="w-8 h-8 fill-base-content"
