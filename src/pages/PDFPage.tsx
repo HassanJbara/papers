@@ -52,13 +52,22 @@ export function PDFPage(props: Props) {
 
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
-  }, []);
+  });
 
   return paper ? (
-    <div className="drawer lg:drawer-open">
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+    <div className="drawer">
+      <input
+        title="drawer-checkbox"
+        id="my-drawer"
+        type="checkbox"
+        className="drawer-toggle"
+      />
 
-      <div className="drawer-content overflow-y-auto h-full relative">
+      <div className="drawer-content overflow-y-auto min-h-screen relative">
+        <label htmlFor="my-drawer" className="btn btn-primary drawer-button">
+          Open drawer
+        </label>
+
         <PdfLoader url={paper.paperLink} beforeLoad={<Spinner />}>
           {(pdfDocument) => (
             <PdfHighlighter
