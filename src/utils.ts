@@ -1,4 +1,4 @@
-import { IHighlight } from "react-pdf-highlighter";
+import type { IHighlight } from "react-pdf-highlighter";
 
 const colors = [
   "primary",

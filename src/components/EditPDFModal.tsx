@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Paper } from "@/types";
+import type { Paper } from "@/types";
 import { ReactSVG } from "react-svg";
 import { usePDFStore } from "@/stores";
 

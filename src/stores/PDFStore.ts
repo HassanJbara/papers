@@ -1,4 +1,4 @@
-import { Category, Paper, Tag } from "@/types";
+import type { Category, Paper, Tag } from "@/types";
 
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
