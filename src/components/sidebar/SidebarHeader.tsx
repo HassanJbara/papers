@@ -9,8 +9,8 @@ export function SidebarHeader(props: Props) {
   const [scale, setScale] = useState(1.25);
 
   useEffect(() => {
-    if (window.PdfViewer) {
-      window.PdfViewer.viewer.currentScaleValue = scale;
+    if ((window as any).PdfViewer) {
+      (window as any).PdfViewer.viewer.currentScaleValue = scale;
     }
   }, [scale]);
 

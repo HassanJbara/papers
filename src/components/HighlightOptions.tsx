@@ -6,17 +6,17 @@ interface Props {
   onUpdate?: () => void;
 }
 
-export function HighlightOptions({ onConfirm, onOpen, onUpdate }: Props) {
+export function HighlightOptions({ onConfirm, onOpen }: Props) {
   const [compact, setCompact] = useState(true);
   const [text, setText] = useState("");
   const [emoji, setEmoji] = useState("");
 
   // for TipContainer
-  function componentDidUpdate(currentCompact: boolean, nextCompact: boolean) {
-    if (onUpdate && currentCompact !== nextCompact) {
-      onUpdate();
-    }
-  }
+  // function componentDidUpdate(currentCompact: boolean, nextCompact: boolean) {
+  //   if (onUpdate && currentCompact !== nextCompact) {
+  //     onUpdate();
+  //   }
+  // }
 
   return (
     <div>
