@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import type { Paper } from "@/types";
 import { ReactSVG } from "react-svg";
+
+import type { Paper } from "@/types";
 import { usePDFStore } from "@/stores";
 
 interface Props {
@@ -22,6 +23,24 @@ export function EditPDFModal(props: Props) {
 
   function openModal() {
     modal.current?.showModal();
+  }
+
+  function closeModal() {
+    modal.current?.close();
+  }
+
+  function submitModal() {
+    updatePaper({
+      id: props.paper.id,
+      title: title,
+      category: categories.find((c) => c.id === categoryId)!,
+      paperLink: pdfLink,
+      githubLink: githubLink,
+      description: description,
+      tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
+    });
+
+    closeModal();
   }
 
   useEffect(() => {
@@ -114,27 +133,13 @@ export function EditPDFModal(props: Props) {
             </div>
 
             <div className="modal-action flex flex-row w-full justify-around">
-              <button
-                className="btn btn-primary"
-                onClick={() =>
-                  updatePaper({
-                    id: props.paper.id,
-                    title: title,
-                    category: categories.find((c) => c.id === categoryId)!,
-                    paperLink: pdfLink,
-                    githubLink: githubLink,
-                    description: description,
-                    tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
-                  })
-                }
-              >
+              <button className="btn btn-primary" onClick={submitModal}>
                 Submit
               </button>
 
-              <form method="dialog">
-                <button className="btn btn-warning">Cancel</button>
-                {/* if there is a button in form, it will close the modal */}
-              </form>
+              <button className="btn btn-warning" onClick={closeModal}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>
