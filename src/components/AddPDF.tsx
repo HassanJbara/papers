@@ -17,9 +17,47 @@ export function AddPDF(props: Props) {
   const [description, setDescription] = useState("");
   const [tagId, setTagId] = useState<number | null>(null);
   const [categoryId, setCategoryId] = useState(-1);
+  const [emptyTitle, setEmptyTitle] = useState(false);
+  const [emptyPDFLink, setEmptyPDFLink] = useState(false);
+  const [emptyCategory, setEmptyCategory] = useState(false);
+
+  const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmptyTitle(false);
+    setTitle(e.target.value);
+  };
+
+  const changePDFLink = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmptyPDFLink(false);
+    setPDFLink(e.target.value);
+  };
+
+  const changeCategoryId = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setEmptyCategory(false);
+    setCategoryId(parseInt(e.target.value));
+  };
+
+  function validateFields() {
+    // check if a necessary field is empty
+
+    if (!title) {
+      setEmptyTitle(true);
+      return false;
+    }
+
+    if (!pdfLink) {
+      setEmptyPDFLink(true);
+      return false;
+    }
+
+    if (categoryId === -1) {
+      setEmptyCategory(true);
+      return false;
+    }
+
+    return true;
+  }
 
   function clearFields() {
-    console.log("clearing fields");
     setTitle("");
     setPDFLink("");
     setGithubLink("");
@@ -29,6 +67,11 @@ export function AddPDF(props: Props) {
   }
 
   function add() {
+    if (!validateFields()) {
+      console.log("invalid fields");
+      return;
+    }
+
     addPaper({
       id: parseInt(getNewId()),
       title: title,
@@ -56,17 +99,21 @@ export function AddPDF(props: Props) {
         <input
           type="text"
           placeholder="PDF Title"
-          className="input input-bordered w-full"
+          className={
+            "input input-bordered w-full " + (emptyTitle ? "input-error" : "")
+          }
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={changeTitle}
         />
 
         <input
           type="text"
           placeholder="PDF Link"
-          className="input input-bordered w-full"
+          className={
+            "input input-bordered w-full " + (emptyPDFLink ? "input-error" : "")
+          }
           value={pdfLink}
-          onChange={(e) => setPDFLink(e.target.value)}
+          onChange={changePDFLink}
         />
 
         <input
@@ -86,8 +133,11 @@ export function AddPDF(props: Props) {
 
         <select
           title="Pick a Category"
-          className="select select-bordered w-full"
-          onChange={(e) => setCategoryId(parseInt(e.target.value))}
+          className={
+            "select select-bordered w-full " +
+            (emptyCategory ? "select-error" : "")
+          }
+          onChange={changeCategoryId}
           value={categoryId}
         >
           <option disabled value={-1}>

@@ -11,9 +11,11 @@ interface Props {
 export function AddTag(props: Props) {
   const { addTag, resetTags, removeTag, tags } = usePDFStore((state) => state);
   const [tagName, setTagName] = useState("");
-  const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const [showError, setShowError] = useState(false);
+  const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShowError(false);
     setTagName(e.target.value);
-
+  };
   function clearFields() {
     setTagName("");
   }
@@ -24,6 +26,12 @@ export function AddTag(props: Props) {
   }
 
   function add() {
+    // check if tag name is empty
+    if (!tagName) {
+      setShowError(true);
+      return;
+    }
+
     addTag({
       id: parseInt(getNewId()),
       name: tagName,
@@ -41,7 +49,9 @@ export function AddTag(props: Props) {
         <input
           type="text"
           placeholder="Tag Name"
-          className="input input-bordered w-full"
+          className={
+            "input input-bordered w-full " + (showError ? "input-error" : "")
+          }
           value={tagName}
           onChange={changeTagName}
         />
