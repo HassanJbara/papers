@@ -16,6 +16,9 @@ export function EditPDFModal(props: Props) {
   const [githubLink, setGithubLink] = useState(props.paper.githubLink);
   const [description, setDescription] = useState(props.paper.description);
   const [tagId, setTagId] = useState(props.paper.tags[0]?.id);
+  const [emptyTitle, setEmptyTitle] = useState(false);
+  const [emptyPDFLink, setEmptyPDFLink] = useState(false);
+  const [emptyCategory, setEmptyCategory] = useState(false);
 
   const { categories, tags, updatePaper } = usePDFStore((state) => state);
 
@@ -29,7 +32,32 @@ export function EditPDFModal(props: Props) {
     modal.current?.close();
   }
 
+  function validateFields() {
+    // check if a necessary field is empty
+
+    if (!title) {
+      setEmptyTitle(true);
+      return false;
+    }
+
+    if (!pdfLink) {
+      setEmptyPDFLink(true);
+      return false;
+    }
+
+    if (categoryId === -1) {
+      setEmptyCategory(true);
+      return false;
+    }
+
+    return true;
+  }
+
   function submitModal() {
+    if (!validateFields()) {
+      return;
+    }
+
     updatePaper({
       id: props.paper.id,
       title: title,
@@ -71,7 +99,10 @@ export function EditPDFModal(props: Props) {
               <input
                 type="text"
                 placeholder="PDF Title"
-                className="input input-bordered w-full"
+                className={
+                  "input input-bordered w-full " +
+                  (emptyTitle ? "input-error" : "")
+                }
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -79,7 +110,10 @@ export function EditPDFModal(props: Props) {
               <input
                 type="text"
                 placeholder="PDF Link"
-                className="input input-bordered w-full"
+                className={
+                  "input input-bordered w-full " +
+                  (emptyPDFLink ? "input-error" : "")
+                }
                 value={pdfLink}
                 onChange={(e) => setPDFLink(e.target.value)}
               />
@@ -104,7 +138,7 @@ export function EditPDFModal(props: Props) {
                 value={categoryId}
                 onChange={(e) => setCategoryId(parseInt(e.target.value))}
               >
-                <option disabled selected>
+                <option disabled value={-1}>
                   Pick a Category
                 </option>
 
@@ -116,11 +150,14 @@ export function EditPDFModal(props: Props) {
               </select>
 
               <select
-                className="select select-bordered w-full"
+                className={
+                  "select select-bordered w-full " +
+                  (emptyCategory ? "select-error" : "")
+                }
                 value={tagId}
                 onChange={(e) => setTagId(parseInt(e.target.value))}
               >
-                <option disabled selected>
+                <option disabled value={-1}>
                   Pick Tags
                 </option>
 

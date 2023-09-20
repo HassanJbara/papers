@@ -20,7 +20,7 @@ export function SidebarHeader(props: Props) {
         {props.title}
       </h2>
 
-      <div className="mb-4 p-4 flex flex-row w-full gap-2 justify-center">
+      <div className="mb-4 p-4 flex lg:flex-row flex-col items-center w-full gap-2 justify-center">
         <Link to="/">
           <span className="text-2xl link link-hover"> ⏪ Home </span>
         </Link>
