@@ -11,6 +11,7 @@ import { Spinner, HighlightOptions } from "@/components";
 import { Sidebar } from "@/components/sidebar";
 import { useHighlightsStore, usePDFStore } from "@/stores";
 import { getNewId, parseIdFromHash, resetHash, updateHighlight } from "@/utils";
+import { ReactSVG } from "react-svg";
 
 interface Props {
   pdfId: string;
@@ -54,13 +55,25 @@ export function PDFPage(props: Props) {
 
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
-  }, []);
+  });
 
   return paper ? (
-    <div className="drawer lg:drawer-open">
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+    <div className="drawer xl:drawer-open">
+      <input
+        title="drawer-checkbox"
+        id="my-drawer"
+        type="checkbox"
+        className="drawer-toggle"
+      />
 
-      <div className="drawer-content overflow-y-auto h-full relative">
+      <div className="drawer-content overflow-y-auto min-h-screen relative">
+        <label
+          htmlFor="my-drawer"
+          className="btn btn-ghost drawer-button xl:hidden fixed top-2 left-2 z-50"
+        >
+          <ReactSVG src="/icons/menu.svg" className="h-10 w-10" />
+        </label>
+
         <PdfLoader url={paper.paperLink} beforeLoad={<Spinner />}>
           {(pdfDocument) => (
             <PdfHighlighter
