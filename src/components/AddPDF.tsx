@@ -68,7 +68,6 @@ export function AddPDF(props: Props) {
 
   function add() {
     if (!validateFields()) {
-      console.log("invalid fields");
       return;
     }
 

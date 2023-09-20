@@ -21,11 +21,11 @@ export function AddPDFModal(props: Props) {
 
   return (
     <>
-      <button className="btn btn-md btn-ghost" onClick={openModal}>
+      <button className="btn lg:btn-md btn-sm btn-ghost" onClick={openModal}>
         <img
           src="/icons/plus.svg"
           alt="plus"
-          className="w-10 h-10 fill-base-content"
+          className="lg:w-10 lg:h-10 w-9 h-9 fill-base-content"
         />
       </button>
 

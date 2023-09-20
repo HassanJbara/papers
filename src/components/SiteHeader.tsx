@@ -7,9 +7,9 @@ export function SiteHeader() {
         Papers
       </h1>
 
-      <div className="join">
+      <div className="join items-center">
         <a href="https://github.com/HassanJbara/papers">
-          <button className="btn btn-md btn-ghost z-50">
+          <button className="btn lg:btn-md btn-sm btn-ghost">
             <img
               alt="Github Logo"
               src="/icons/github.svg"
@@ -19,11 +19,11 @@ export function SiteHeader() {
         </a>
 
         <a href="https://xela.blog/">
-          <button className="btn btn-md btn-ghost z-50 text-xl">
+          <button className="btn lg:btn-md btn-sm btn-ghost">
             <img
               alt="Xela Logo"
               src="/xela-logo.png"
-              className="w-12 h-12 fill-base-content"
+              className="lg:w-12 lg:h-12 h-10 w-12 fill-base-content"
             />
           </button>
         </a>
