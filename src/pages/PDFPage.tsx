@@ -7,7 +7,7 @@ import {
   AreaHighlight,
 } from "react-pdf-highlighter";
 
-import { Spinner, HighlightOptions } from "@/components";
+import { HighlightOptions } from "@/components";
 import { Sidebar } from "@/components/sidebar";
 import { useHighlightsStore, usePDFStore } from "@/stores";
 import { getNewId, parseIdFromHash, resetHash, updateHighlight } from "@/utils";
