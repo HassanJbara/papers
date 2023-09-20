@@ -74,7 +74,14 @@ export function PDFPage(props: Props) {
           <ReactSVG src="/icons/menu.svg" className="h-10 w-10" />
         </label>
 
-        <PdfLoader url={paper.paperLink} beforeLoad={<Spinner />}>
+        <PdfLoader
+          url={paper.paperLink}
+          beforeLoad={
+            <div className="h-screen w-full items-center justify-center flex flex-row">
+              <span className="loading loading-ring loading-lg " />
+            </div>
+          }
+        >
           {(pdfDocument) => (
             <PdfHighlighter
               pdfDocument={pdfDocument}
