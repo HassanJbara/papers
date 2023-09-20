@@ -37,7 +37,9 @@ export function PDFPage(props: Props) {
   const paper = usePDFStore((state) => state.getPaperById(props.pdfId));
   const highlights = getPaperHighlights(parseInt(props.pdfId));
 
-  const scrollViewerTo = useRef((highlight: any) => {});
+  const scrollViewerTo = useRef((highlight: any) => {
+    return highlight;
+  });
 
   const scrollToHighlightFromHash = () => {
     const highlight = getHighlightById(
@@ -138,7 +140,7 @@ export function PDFPage(props: Props) {
                   <Popup
                     popupContent={<HighlightPopup {...highlight} />}
                     onMouseOver={(popupContent) =>
-                      setTip(highlight, (highlight) => popupContent)
+                      setTip(highlight, () => popupContent)
                     }
                     onMouseOut={hideTip}
                     key={index}

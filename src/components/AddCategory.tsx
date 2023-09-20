@@ -12,16 +12,11 @@ export function AddCategory(props: Props) {
   const { addCategory, resetCategories, categories, removeCategory } =
     usePDFStore((state) => state);
   const [categoryName, setCategoryName] = useState("");
-  const changeCategoryName = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const [showError, setShowError] = useState(false);
+  const changeCategoryName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShowError(false);
     setCategoryName(e.target.value);
-
-  function add() {
-    addCategory({ id: parseInt(getNewId()), name: categoryName });
-
-    clearFields();
-
-    props.closeModal();
-  }
+  };
 
   function clearFields() {
     setCategoryName("");
@@ -32,13 +27,29 @@ export function AddCategory(props: Props) {
     props.closeModal();
   }
 
+  function add() {
+    // check if category name is empty
+    if (!categoryName) {
+      setShowError(true);
+      return;
+    }
+
+    addCategory({ id: parseInt(getNewId()), name: categoryName });
+
+    clearFields();
+
+    props.closeModal();
+  }
+
   return (
     <div className="mt-2">
       <div className="w-full flex flex-col gap-4 py-8">
         <input
           type="text"
           placeholder="Category Name"
-          className="input input-bordered w-full"
+          className={
+            "input input-bordered w-full " + (showError ? "input-error" : "")
+          }
           value={categoryName}
           onChange={changeCategoryName}
         />

@@ -1,5 +1,5 @@
 import { useHighlightsStore } from "@/stores";
-import { IHighlight } from "react-pdf-highlighter";
+import type { IHighlight } from "react-pdf-highlighter";
 
 interface Props {
   paperId: number;
