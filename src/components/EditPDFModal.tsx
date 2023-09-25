@@ -14,13 +14,16 @@ export function EditPDFModal(props: Props) {
   const [categoryId, setCategoryId] = useState(props.paper.category.id);
   const [pdfLink, setPDFLink] = useState(props.paper.paperLink);
   const [githubLink, setGithubLink] = useState(props.paper.githubLink);
+  const [citation, setCitation] = useState(props.paper.citation);
   const [description, setDescription] = useState(props.paper.description);
   const [tagId, setTagId] = useState(props.paper.tags[0]?.id);
   const [emptyTitle, setEmptyTitle] = useState(false);
   const [emptyPDFLink, setEmptyPDFLink] = useState(false);
   const [emptyCategory, setEmptyCategory] = useState(false);
 
-  const { categories, tags, updatePaper } = usePDFStore((state) => state);
+  const { categories, tags, updatePaper, removePaper } = usePDFStore(
+    (state) => state
+  );
 
   const modal = useRef<HTMLDialogElement | null>(null);
 
@@ -64,10 +67,29 @@ export function EditPDFModal(props: Props) {
       category: categories.find((c) => c.id === categoryId)!,
       paperLink: pdfLink,
       githubLink: githubLink,
+      citation: citation,
       description: description,
       tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
     });
 
+    closeModal();
+  }
+
+  function cancel() {
+    // reset all the fields
+    setTitle(props.paper.title);
+    setCategoryId(props.paper.category.id);
+    setPDFLink(props.paper.paperLink);
+    setGithubLink(props.paper.githubLink);
+    setCitation(props.paper.citation);
+    setDescription(props.paper.description);
+    setTagId(props.paper.tags[0]?.id);
+
+    closeModal();
+  }
+
+  function remove() {
+    removePaper(props.paper.id);
     closeModal();
   }
 
@@ -81,7 +103,7 @@ export function EditPDFModal(props: Props) {
     <>
       <button
         title="Edit PDF"
-        className="btn btn-primary btn-sm"
+        className="btn btn-primary btn-md"
         onClick={openModal}
       >
         <ReactSVG
@@ -91,7 +113,7 @@ export function EditPDFModal(props: Props) {
       </button>
 
       <dialog id={props.id} className="modal">
-        <div className="modal-box w-full flex flex-col">
+        <div className="modal-box flex flex-col">
           <h3 className="text-2xl font-bold">Edit PDF</h3>
 
           <div className="mt-2">
@@ -127,7 +149,14 @@ export function EditPDFModal(props: Props) {
               />
 
               <textarea
-                className="textarea textarea-bordered w-full"
+                placeholder="Citation (optional)"
+                className="textarea textarea-bordered textarea-lg w-full"
+                value={citation}
+                onChange={(e) => setCitation(e.target.value)}
+              />
+
+              <textarea
+                className="textarea textarea-bordered textarea-lg w-full"
                 placeholder="Description (optional)"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -174,7 +203,11 @@ export function EditPDFModal(props: Props) {
                 Submit
               </button>
 
-              <button className="btn btn-warning" onClick={closeModal}>
+              <button className="btn btn-error" onClick={remove}>
+                Remove
+              </button>
+
+              <button className="btn btn-warning" onClick={cancel}>
                 Cancel
               </button>
             </div>

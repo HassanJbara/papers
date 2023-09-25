@@ -15,6 +15,7 @@ export function AddPDF(props: Props) {
   const [pdfLink, setPDFLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
   const [description, setDescription] = useState("");
+  const [citation, setCitation] = useState("");
   const [tagId, setTagId] = useState<number | null>(null);
   const [categoryId, setCategoryId] = useState(-1);
   const [emptyTitle, setEmptyTitle] = useState(false);
@@ -78,6 +79,7 @@ export function AddPDF(props: Props) {
       paperLink: pdfLink,
       githubLink: githubLink,
       description: description,
+      citation: citation,
       tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
     });
 
@@ -106,7 +108,7 @@ export function AddPDF(props: Props) {
         />
 
         <input
-          type="text"
+          type="url"
           placeholder="PDF Link"
           className={
             "input input-bordered w-full " + (emptyPDFLink ? "input-error" : "")
@@ -114,6 +116,8 @@ export function AddPDF(props: Props) {
           value={pdfLink}
           onChange={changePDFLink}
         />
+
+        <div className="divider" />
 
         <input
           type="text"
@@ -124,11 +128,20 @@ export function AddPDF(props: Props) {
         />
 
         <textarea
-          className="textarea textarea-bordered w-full"
+          className="textarea textarea-bordered textarea-lg w-full"
           placeholder="Description (optional)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+
+        <textarea
+          placeholder="Citation (optional)"
+          className="textarea textarea-bordered textarea-lg w-full"
+          value={citation}
+          onChange={(e) => setCitation(e.target.value)}
+        />
+
+        <div className="divider" />
 
         <select
           title="Pick a Category"

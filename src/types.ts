@@ -17,4 +17,5 @@ export interface Paper {
   paperLink: string;
   githubLink?: string;
   description?: string;
+  citation: string;
 }
