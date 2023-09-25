@@ -1,5 +1,7 @@
-import { useHighlightsStore } from "@/stores";
 import type { IHighlight } from "react-pdf-highlighter";
+import { ReactSVG } from "react-svg";
+
+import { useHighlightsStore } from "@/stores";
 
 interface Props {
   paperId: number;
@@ -14,13 +16,17 @@ export function PDFHighlight({ highlight, paperId }: Props) {
   const { removeHighlight } = useHighlightsStore((state) => state);
 
   return (
-    <div className="indicator w-96">
+    <div className="indicator w-11/12 h-32">
       <div className="indicator-item">
         <button
+          title="Remove highlight"
           className="btn btn-error btn-outline btn-circle btn-sm"
           onClick={() => removeHighlight(paperId, highlight.id)}
         >
-          X
+          <ReactSVG
+            src="/icons/x.svg"
+            className="w-3 h-3 fill-current mb-0.5"
+          />
         </button>
       </div>
 

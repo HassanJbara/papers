@@ -9,9 +9,8 @@ export function MainPage() {
       <SiteHeader />
 
       <p className="md:w-1/2 my-10 text-2xl font-semibold text-base-content">
-        A simple reader with a collection of Computer Science papers that I
-        found particularly interesting, with links to github, source and
-        sometimes my notes.
+        A simple and functional open-source PDF reader. For more information on
+        the project, check out the GitHub repository.
       </p>
 
       {categories.map(
