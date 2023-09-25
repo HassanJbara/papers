@@ -37,8 +37,6 @@ export function AddCategory(props: Props) {
     addCategory({ id: parseInt(getNewId()), name: categoryName });
 
     clearFields();
-
-    props.closeModal();
   }
 
   return (
@@ -70,8 +68,8 @@ export function AddCategory(props: Props) {
                 onClick={() => removeCategory(category.id)}
               >
                 <ReactSVG
-                  src="/icons/x.svg"
-                  className="w-4 h-4 text-info-content fill-current"
+                  src="/icons/xmark.svg"
+                  className="w-4 h-4 fill-current mb-0.5"
                 />
               </button>
 

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { ReactSVG } from "react-svg";
+
 import { AddCategory, AddPDF, AddTag } from "@/components";
 
 interface Props {
@@ -30,7 +32,7 @@ export function AddPDFModal(props: Props) {
       </button>
 
       <dialog id={props.id} className="modal">
-        <div className="modal-box w-full flex flex-col">
+        <div className="modal-box flex flex-col">
           <div className="tabs tabs-boxed w-fit self-center">
             <a
               className={
@@ -38,7 +40,7 @@ export function AddPDFModal(props: Props) {
               }
               onClick={() => setActiveTab(0)}
             >
-              Add a PDF
+              <ReactSVG src="/icons/pdf.svg" className="h-6 w-6 fill-current" />
             </a>
 
             <a
@@ -47,7 +49,10 @@ export function AddPDFModal(props: Props) {
               }
               onClick={() => setActiveTab(1)}
             >
-              Add a Category
+              <ReactSVG
+                src="/icons/folder.svg"
+                className="h-6 w-6 fill-current"
+              />
             </a>
 
             <a
@@ -56,7 +61,7 @@ export function AddPDFModal(props: Props) {
               }
               onClick={() => setActiveTab(2)}
             >
-              Add a Tag
+              <ReactSVG src="/icons/tag.svg" className="h-6 w-6 fill-current" />
             </a>
           </div>
 

@@ -39,8 +39,6 @@ export function AddTag(props: Props) {
     });
 
     clearFields();
-
-    props.closeModal();
   }
 
   return (
@@ -72,8 +70,8 @@ export function AddTag(props: Props) {
                 onClick={() => removeTag(tag.id)}
               >
                 <ReactSVG
-                  src="/icons/x.svg"
-                  className="w-4 h-4 text-info-content fill-current"
+                  src="/icons/xmark.svg"
+                  className="w-4 h-4 fill-current mb-0.5"
                 />
               </button>
 
