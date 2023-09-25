@@ -71,7 +71,7 @@ export function PDFPage(props: Props) {
           htmlFor="my-drawer"
           className="btn btn-ghost drawer-button xl:hidden fixed top-2 left-2 z-50"
         >
-          <ReactSVG src="/icons/menu.svg" className="h-10 w-10" />
+          <ReactSVG src="/icons/menu.svg" className="h-10 w-10 fill-current" />
         </label>
 
         <PdfLoader
@@ -79,6 +79,17 @@ export function PDFPage(props: Props) {
           beforeLoad={
             <div className="h-screen w-full items-center justify-center flex flex-row">
               <span className="loading loading-ring loading-lg " />
+            </div>
+          }
+          errorMessage={
+            <div className="h-screen w-full flex flex-col gap-4 items-center justify-center">
+              <ReactSVG
+                src="/icons/error.svg"
+                className="w-10 h-10 fill-current"
+              />
+              <span className="font-bold text-2xl text-base-content">
+                Could not find the requested PDF
+              </span>
             </div>
           }
         >

@@ -1,17 +1,26 @@
-import { usePDFStore } from "@/stores";
+import { getNewId } from "@/utils";
 import type { Paper } from "@/types";
 import { EditPDFModal } from "@/components";
-import { getNewId } from "@/utils";
 
 import { Link } from "wouter";
 import { ReactSVG } from "react-svg";
+import { useState } from "react";
 
 interface Props {
   paper: Paper;
 }
 
 export function PDFCard(props: Props) {
-  const { removePaper } = usePDFStore((state) => state);
+  const [tooltipText, setTooltipText] = useState("Copy to clipboard");
+  const [tooltipStyle, setTooltipStyle] = useState("tooltip-primary");
+
+  function copyToClipboard() {
+    navigator.clipboard.writeText(props.paper.citation);
+    setTooltipText("Copied!");
+    setTooltipStyle("tooltip-success");
+    setTimeout(() => setTooltipText("Copy to clipboard"), 5000);
+    setTimeout(() => setTooltipStyle("tooltip-primary"), 5000);
+  }
 
   return (
     <div className="card card-compact w-full bg-base-300 text-neutral-content">
@@ -22,23 +31,6 @@ export function PDFCard(props: Props) {
               <h2 className="text-2xl self-center">{props.paper.title}</h2>
             </a>
           </Link>
-
-          <div className="card-actions self-end">
-            <div className="flex flex-row gap-2">
-              <EditPDFModal paper={props.paper} id={"modal_" + getNewId()} />
-
-              <button
-                title="Remove PDF"
-                className="btn btn-error btn-sm"
-                onClick={() => removePaper(props.paper.id)}
-              >
-                <ReactSVG
-                  src="/icons/x.svg"
-                  className="w-4 h-4 text-error-content fill-current"
-                />
-              </button>
-            </div>
-          </div>
         </div>
 
         {props.paper.description && (
@@ -47,7 +39,7 @@ export function PDFCard(props: Props) {
           </p>
         )}
 
-        <div className="card-actions justify-end items-center flex flex-row mt-4">
+        <div className="card-actions items-center flex flex-col lg:flex-row mt-4">
           {props.paper.tags.map((tag) => (
             <div
               className={"p-2 badge badge-lg badge-outline badge-" + tag.color}
@@ -59,12 +51,8 @@ export function PDFCard(props: Props) {
 
           <div className="divider lg:divider-horizontal" />
 
-          <div className="join z-10">
-            <a
-              href={props.paper.paperLink}
-              className="join-item"
-              target="_blank"
-            >
+          <div className="lg:justify-end flex flex-row gap-2 z-10">
+            <a href={props.paper.paperLink} target="_blank">
               <button className="btn btn-md btn-ghost z-50 text-xl">🔗</button>
             </a>
 
@@ -72,7 +60,6 @@ export function PDFCard(props: Props) {
               <a
                 title="GitHub Link"
                 href={props.paper.githubLink}
-                className="join-item"
                 target="_blank"
               >
                 <button
@@ -81,11 +68,28 @@ export function PDFCard(props: Props) {
                 >
                   <ReactSVG
                     src="/icons/github.svg"
-                    className="w-8 h-8 fill-base-content"
+                    className="w-8 h-8 fill-current"
                   />
                 </button>
               </a>
             ) : null}
+
+            {props.paper.citation ? (
+              <div className={"tooltip " + tooltipStyle} data-tip={tooltipText}>
+                <button
+                  title="Citation"
+                  className="btn btn-md btn-ghost z-50"
+                  onClick={copyToClipboard}
+                >
+                  <ReactSVG
+                    src="/icons/book-bookmark.svg"
+                    className="w-6 h-6 fill-current"
+                  />
+                </button>
+              </div>
+            ) : null}
+
+            <EditPDFModal paper={props.paper} id={"modal_" + getNewId()} />
           </div>
         </div>
       </div>
