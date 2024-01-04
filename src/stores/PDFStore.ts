@@ -1,4 +1,5 @@
-import type { Category, Paper, Tag } from "@/types";
+import api from "@/api";
+import type { Category, PaperRequest, Paper, Tag } from "@/types";
 
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
@@ -8,20 +9,20 @@ interface PDFStoreState {
   categories: Category[];
   tags: Tag[];
   setPapers: (papers: Paper[]) => void;
-  addPaper: (paper: Paper) => void;
+  addPaper: (paper: PaperRequest) => void;
   removePaper: (paperId: number) => void;
-  updatePaper: (paper: Paper) => void;
+  updatePaper: (id: number, paper: PaperRequest) => void;
   getPaperById: (id: string) => Paper | undefined;
   setCategories: (categories: Category[]) => void;
-  addCategory: (category: Category) => void;
+  addCategory: (category: Omit<Category, "id">) => void;
   removeCategory: (categoryId: number) => void;
   setTags: (tags: Tag[]) => void;
   addTag: (tag: Tag) => void;
   removeTag: (tagId: number) => void;
-  resetCategories: () => void;
   resetTags: () => void;
-  resetPapers: () => void;
   resetState: () => void;
+  fillPapers: () => void;
+  fillCategories: () => void;
 }
 
 const usePDFStore = create<PDFStoreState>()(
@@ -34,29 +35,70 @@ const usePDFStore = create<PDFStoreState>()(
         getPaperById: (id: string) =>
           get().papers.find((paper) => paper.id === parseInt(id)),
         setPapers: (papers: Paper[]) => set({ papers }),
-        addPaper: (paper: Paper) =>
-          set((state) => ({ papers: [...state.papers, paper] })),
-        updatePaper: (paper: Paper) =>
-          get().setPapers(
-            get().papers.map((p) => (p.id === paper.id ? paper : p))
-          ),
-        removePaper: (paperId: number) =>
-          get().setPapers(get().papers.filter((paper) => paper.id !== paperId)),
+        addPaper: async (paper: PaperRequest) => {
+          try {
+            await api.papers.create(paper);
+            get().fillPapers();
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        updatePaper: async (id: number, paper: PaperRequest) => {
+          try {
+            await api.papers.update(id, paper);
+            get().fillPapers();
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        removePaper: async (paperId: number) => {
+          try {
+            await api.papers.delete(paperId);
+            get().fillPapers();
+          } catch (error) {
+            console.log(error);
+          }
+        },
         setCategories: (categories: Category[]) => set({ categories }),
-        addCategory: (category: Category) =>
-          set((state) => ({ categories: [...state.categories, category] })),
-        removeCategory: (categoryId: number) =>
-          get().setCategories(
-            get().categories.filter((category) => category.id !== categoryId)
-          ),
+        addCategory: async (category: Omit<Category, "id">) => {
+          try {
+            await api.categories.create(category);
+            get().fillCategories();
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        removeCategory: async (categoryId: number) => {
+          try {
+            await api.categories.delete(categoryId);
+            get().fillCategories();
+          } catch (error) {
+            console.log(error);
+          }
+        },
         setTags: (tags: Tag[]) => set({ tags }),
         addTag: (tag: Tag) => set((state) => ({ tags: [...state.tags, tag] })),
         removeTag: (tagId: number) =>
           get().setTags(get().tags.filter((tag) => tag.id !== tagId)),
-        resetCategories: () => set({ categories: [] }),
         resetTags: () => set({ tags: [] }),
-        resetPapers: () => set({ papers: [] }),
         resetState: () => set({ papers: [], categories: [], tags: [] }),
+        fillPapers: async () => {
+          try {
+            const papersData = await api.papers.getAll();
+            set({ papers: papersData.data });
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        fillCategories: async () => {
+          try {
+            const categoriesData = await api.categories.getAll();
+
+            set({ categories: categoriesData.data });
+          } catch (error) {
+            console.log(error);
+          }
+        },
       }),
       {
         name: "pdf-store",
