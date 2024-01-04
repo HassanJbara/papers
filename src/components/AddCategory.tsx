@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { usePDFStore } from "@/stores";
-import { getNewId } from "@/utils";
 
 interface Props {
   closeModal: () => void;
 }
 
 export function AddCategory(props: Props) {
-  const { addCategory, resetCategories, categories, removeCategory } =
+  const { addCategory, fillCategories, categories, removeCategory } =
     usePDFStore((state) => state);
   const [categoryName, setCategoryName] = useState("");
   const [showError, setShowError] = useState(false);
@@ -34,10 +33,14 @@ export function AddCategory(props: Props) {
       return;
     }
 
-    addCategory({ id: parseInt(getNewId()), name: categoryName });
+    addCategory({ name: categoryName });
 
     clearFields();
   }
+
+  useEffect(() => {
+    fillCategories();
+  }, []);
 
   return (
     <div className="mt-2">
@@ -86,8 +89,8 @@ export function AddCategory(props: Props) {
           Add
         </button>
 
-        <button className="btn btn-error" onClick={resetCategories}>
-          Reset
+        <button className="btn btn-success" onClick={fillCategories}>
+          Refresh
         </button>
 
         <button className="btn btn-warning" onClick={cancel}>

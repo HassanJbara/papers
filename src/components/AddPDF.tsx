@@ -1,14 +1,13 @@
 import { useState } from "react";
 
 import { usePDFStore } from "@/stores";
-import { getNewId } from "@/utils";
 
 interface Props {
   closeModal: () => void;
 }
 
 export function AddPDF(props: Props) {
-  const { tags, categories, addPaper, resetPapers } = usePDFStore(
+  const { tags, categories, addPaper, fillPapers } = usePDFStore(
     (state) => state
   );
   const [title, setTitle] = useState("");
@@ -73,14 +72,13 @@ export function AddPDF(props: Props) {
     }
 
     addPaper({
-      id: parseInt(getNewId()),
       title: title,
-      category: categories.find((c) => c.id === categoryId)!,
-      paperLink: pdfLink,
+      link: pdfLink,
+      category_id: categoryId,
       githubLink: githubLink,
       description: description,
       citation: citation,
-      tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
+      tags: tagId ? [tagId] : [],
     });
 
     clearFields();
@@ -186,8 +184,8 @@ export function AddPDF(props: Props) {
           Add
         </button>
 
-        <button className="btn btn-error mx-2" onClick={resetPapers}>
-          Reset
+        <button className="btn btn-success mx-2" onClick={fillPapers}>
+          Refresh
         </button>
 
         <button className="btn btn-warning" onClick={cancel}>

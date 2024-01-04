@@ -11,17 +11,17 @@ interface Props {
 
 export function EditPDFModal(props: Props) {
   const [title, setTitle] = useState(props.paper.title);
-  const [categoryId, setCategoryId] = useState(props.paper.category.id);
-  const [pdfLink, setPDFLink] = useState(props.paper.paperLink);
+  const [categoryId, setCategoryId] = useState(props.paper.category?.id);
+  const [pdfLink, setPDFLink] = useState(props.paper.link);
   const [githubLink, setGithubLink] = useState(props.paper.githubLink);
   const [citation, setCitation] = useState(props.paper.citation);
   const [description, setDescription] = useState(props.paper.description);
-  const [tagId, setTagId] = useState(props.paper.tags[0]?.id);
+  // const [tagId, setTagId] = useState(props.paper.tags);
   const [emptyTitle, setEmptyTitle] = useState(false);
   const [emptyPDFLink, setEmptyPDFLink] = useState(false);
-  const [emptyCategory, setEmptyCategory] = useState(false);
+  // const [emptyCategory, setEmptyCategory] = useState(false);
 
-  const { categories, tags, updatePaper, removePaper } = usePDFStore(
+  const { categories, updatePaper, removePaper } = usePDFStore(
     (state) => state
   );
 
@@ -48,11 +48,6 @@ export function EditPDFModal(props: Props) {
       return false;
     }
 
-    if (categoryId === -1) {
-      setEmptyCategory(true);
-      return false;
-    }
-
     return true;
   }
 
@@ -61,15 +56,14 @@ export function EditPDFModal(props: Props) {
       return;
     }
 
-    updatePaper({
-      id: props.paper.id,
+    updatePaper(props.paper.id, {
       title: title,
-      category: categories.find((c) => c.id === categoryId)!,
-      paperLink: pdfLink,
+      link: pdfLink,
+      category_id: categoryId,
       githubLink: githubLink,
       citation: citation,
       description: description,
-      tags: tagId ? [tags.find((t) => t.id === tagId)!] : [],
+      tags: [],
     });
 
     closeModal();
@@ -78,12 +72,12 @@ export function EditPDFModal(props: Props) {
   function cancel() {
     // reset all the fields
     setTitle(props.paper.title);
-    setCategoryId(props.paper.category.id);
-    setPDFLink(props.paper.paperLink);
+    setCategoryId(props.paper.category?.id);
+    setPDFLink(props.paper.link);
     setGithubLink(props.paper.githubLink);
     setCitation(props.paper.citation);
     setDescription(props.paper.description);
-    setTagId(props.paper.tags[0]?.id);
+    // setTagId(props.paper.tags);
 
     closeModal();
   }
@@ -144,27 +138,27 @@ export function EditPDFModal(props: Props) {
                 type="text"
                 placeholder="Github Link (optional)"
                 className="input input-bordered w-full"
-                value={githubLink}
+                value={githubLink ? githubLink : ""}
                 onChange={(e) => setGithubLink(e.target.value)}
               />
 
               <textarea
                 placeholder="Citation (optional)"
                 className="textarea textarea-bordered textarea-lg w-full"
-                value={citation}
+                value={citation ? citation : ""}
                 onChange={(e) => setCitation(e.target.value)}
               />
 
               <textarea
                 className="textarea textarea-bordered textarea-lg w-full"
                 placeholder="Description (optional)"
-                value={description}
+                value={description ? description : ""}
                 onChange={(e) => setDescription(e.target.value)}
               />
 
               <select
                 className="select select-bordered w-full"
-                value={categoryId}
+                value={categoryId ? categoryId : -1}
                 onChange={(e) => setCategoryId(parseInt(e.target.value))}
               >
                 <option disabled value={-1}>
@@ -178,13 +172,13 @@ export function EditPDFModal(props: Props) {
                 ))}
               </select>
 
-              <select
+              {/* <select
                 className={
                   "select select-bordered w-full " +
                   (emptyCategory ? "select-error" : "")
                 }
                 value={tagId}
-                onChange={(e) => setTagId(parseInt(e.target.value))}
+                onChange={(e) => setTagId([parseInt(e.target.value)])}
               >
                 <option disabled value={-1}>
                   Pick Tags
@@ -195,7 +189,7 @@ export function EditPDFModal(props: Props) {
                     {tag.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
 
             <div className="modal-action flex flex-row w-full justify-around">
