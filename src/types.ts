@@ -12,10 +12,20 @@ export interface Tag {
 export interface Paper {
   id: number;
   title: string;
+  link: string;
   tags: Tag[];
-  category: Category;
-  paperLink: string;
+  category: Category | null;
   githubLink?: string;
   description?: string;
   citation: string;
+}
+
+export interface PaperRequest {
+  title: string;
+  link: string;
+  category_id?: number;
+  githubLink?: string;
+  tags?: number[];
+  description?: string;
+  citation?: string;
 }
