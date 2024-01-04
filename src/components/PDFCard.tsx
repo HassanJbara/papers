@@ -40,7 +40,7 @@ export function PDFCard(props: Props) {
         )}
 
         <div className="card-actions items-center flex flex-col lg:flex-row mt-4">
-          {props.paper.tags.map((tag) => (
+          {props.paper.tags?.map((tag) => (
             <div
               className={"p-2 badge badge-lg badge-outline badge-" + tag.color}
               key={tag.id}
@@ -52,7 +52,7 @@ export function PDFCard(props: Props) {
           <div className="divider lg:divider-horizontal" />
 
           <div className="lg:justify-end flex flex-row gap-2 z-10">
-            <a href={props.paper.paperLink} target="_blank">
+            <a href={props.paper.link} target="_blank">
               <button className="btn btn-md btn-ghost z-50 text-xl">🔗</button>
             </a>
 

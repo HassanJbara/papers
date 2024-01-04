@@ -15,7 +15,7 @@ export function MainPage() {
 
       {categories.map(
         (category) =>
-          papers.filter((p) => p.category.id === category.id).length > 0 && (
+          papers.filter((p) => p.category?.id === category.id).length > 0 && (
             <div
               className="my-6 md:w-1/2 flex flex-col gap-4"
               key={category.id}
@@ -25,12 +25,27 @@ export function MainPage() {
               </h2>
 
               {papers
-                .filter((paper) => paper.category.id === category.id)
+                .filter((paper) => paper.category?.id === category.id)
                 .map((paper) => (
                   <PDFCard paper={paper} key={paper.id} />
                 ))}
             </div>
           )
+      )}
+
+      {/* add section for papers with category==null */}
+      {papers.filter((p) => p.category == null).length > 0 && (
+        <div className="my-6 md:w-1/2 flex flex-col gap-4">
+          <h2 className="font-semibold text-4xl text-base-content">
+            Uncategorized
+          </h2>
+
+          {papers
+            .filter((paper) => paper.category == null)
+            .map((paper) => (
+              <PDFCard paper={paper} key={paper.id} />
+            ))}
+        </div>
       )}
     </div>
   );
