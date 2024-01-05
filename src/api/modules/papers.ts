@@ -16,6 +16,9 @@ const papers = {
   update: (id: number, paper: PaperRequest): AxiosPromise<void> => {
     return axiosAPI.put(`/pdfs/${id}`, paper);
   },
+  updateTags: (id: number, tags: Array<number>): AxiosPromise<void> => {
+    return axiosAPI.put(`/pdfs/${id}/tags`, { tags: tags });
+  },
   delete: (id: number): AxiosPromise<void> => {
     return axiosAPI.delete(`/pdfs/${id}`);
   },
