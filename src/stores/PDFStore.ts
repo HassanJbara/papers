@@ -9,7 +9,7 @@ interface PDFStoreState {
   categories: Category[];
   tags: Tag[];
   setPapers: (papers: Paper[]) => void;
-  addPaper: (paper: PaperRequest) => void;
+  addPaper: (paper: PaperRequest, tags: number[]) => void;
   removePaper: (paperId: number) => void;
   updatePaper: (id: number, paper: PaperRequest) => void;
   getPaperById: (id: string) => Paper | undefined;
@@ -17,12 +17,12 @@ interface PDFStoreState {
   addCategory: (category: Omit<Category, "id">) => void;
   removeCategory: (categoryId: number) => void;
   setTags: (tags: Tag[]) => void;
-  addTag: (tag: Tag) => void;
+  addTag: (tag: Omit<Tag, "id">) => void;
   removeTag: (tagId: number) => void;
-  resetTags: () => void;
-  resetState: () => void;
+  fillTags: () => void;
   fillPapers: () => void;
   fillCategories: () => void;
+  resetState: () => void;
 }
 
 const usePDFStore = create<PDFStoreState>()(
@@ -35,9 +35,17 @@ const usePDFStore = create<PDFStoreState>()(
         getPaperById: (id: string) =>
           get().papers.find((paper) => paper.id === parseInt(id)),
         setPapers: (papers: Paper[]) => set({ papers }),
-        addPaper: async (paper: PaperRequest) => {
+        addPaper: async (paper: PaperRequest, tags: number[]) => {
           try {
-            await api.papers.create(paper);
+            await api.papers.create(paper).then((res) => {
+              const location = res.headers.location;
+              const paperId = location.substring(location.lastIndexOf("/") + 1);
+              try {
+                api.papers.updateTags(parseInt(paperId), tags);
+              } catch (error) {
+                console.log(error);
+              }
+            });
             get().fillPapers();
           } catch (error) {
             console.log(error);
@@ -77,11 +85,30 @@ const usePDFStore = create<PDFStoreState>()(
           }
         },
         setTags: (tags: Tag[]) => set({ tags }),
-        addTag: (tag: Tag) => set((state) => ({ tags: [...state.tags, tag] })),
-        removeTag: (tagId: number) =>
-          get().setTags(get().tags.filter((tag) => tag.id !== tagId)),
-        resetTags: () => set({ tags: [] }),
-        resetState: () => set({ papers: [], categories: [], tags: [] }),
+        addTag: async (tag: Omit<Tag, "id">) => {
+          try {
+            await api.tags.create(tag);
+            get().fillTags();
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        removeTag: async (tagId: number) => {
+          try {
+            await api.tags.delete(tagId);
+            get().fillTags();
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        fillTags: async () => {
+          try {
+            const tagsData = await api.tags.getAll();
+            set({ tags: tagsData.data });
+          } catch (error) {
+            console.log(error);
+          }
+        },
         fillPapers: async () => {
           try {
             const papersData = await api.papers.getAll();
@@ -99,6 +126,7 @@ const usePDFStore = create<PDFStoreState>()(
             console.log(error);
           }
         },
+        resetState: () => set({ papers: [], categories: [], tags: [] }),
       }),
       {
         name: "pdf-store",

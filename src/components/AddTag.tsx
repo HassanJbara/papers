@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { usePDFStore } from "@/stores";
-import { getNewId, getTagColor } from "@/utils";
+import { getTagColor } from "@/utils";
 
 interface Props {
   closeModal: () => void;
 }
 
 export function AddTag(props: Props) {
-  const { addTag, resetTags, removeTag, tags } = usePDFStore((state) => state);
+  const { addTag, fillTags, removeTag, tags } = usePDFStore((state) => state);
   const [tagName, setTagName] = useState("");
   const [showError, setShowError] = useState(false);
   const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,13 +33,16 @@ export function AddTag(props: Props) {
     }
 
     addTag({
-      id: parseInt(getNewId()),
       name: tagName,
       color: getTagColor(),
     });
 
     clearFields();
   }
+
+  useEffect(() => {
+    fillTags();
+  }, []);
 
   return (
     <div className="mt-2">
@@ -88,8 +91,8 @@ export function AddTag(props: Props) {
           Add
         </button>
 
-        <button className="btn btn-error" onClick={resetTags}>
-          Reset
+        <button className="btn btn-success" onClick={fillTags}>
+          Refresh
         </button>
 
         <button className="btn btn-warning" onClick={cancel}>
