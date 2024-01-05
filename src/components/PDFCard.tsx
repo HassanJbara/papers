@@ -1,10 +1,10 @@
-import { getNewId } from "@/utils";
+import { getNewId, getTagColor } from "@/utils";
 import type { Paper } from "@/types";
 import { EditPDFModal } from "@/components";
 
 import { Link } from "wouter";
 import { ReactSVG } from "react-svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   paper: Paper;
@@ -21,6 +21,10 @@ export function PDFCard(props: Props) {
     setTimeout(() => setTooltipText("Copy to clipboard"), 5000);
     setTimeout(() => setTooltipStyle("tooltip-primary"), 5000);
   }
+
+  useEffect(() => {
+    console.log(props.paper.tags);
+  }, [props.paper.tags]);
 
   return (
     <div className="card card-compact w-full bg-base-300 text-neutral-content">
@@ -42,7 +46,9 @@ export function PDFCard(props: Props) {
         <div className="card-actions items-center flex flex-col lg:flex-row mt-4">
           {props.paper.tags?.map((tag) => (
             <div
-              className={"p-2 badge badge-lg badge-outline badge-" + tag.color}
+              className={
+                "p-2 badge badge-lg badge-outline badge-" + getTagColor()
+              }
               key={tag.id}
             >
               {tag.name}
