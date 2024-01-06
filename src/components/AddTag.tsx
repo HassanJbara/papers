@@ -3,6 +3,7 @@ import { ReactSVG } from "react-svg";
 
 import { usePDFStore } from "@/stores";
 import { getTagColor } from "@/utils";
+import type { Tag } from "@/types";
 
 interface Props {
   closeModal: () => void;
@@ -40,6 +41,28 @@ export function AddTag(props: Props) {
     clearFields();
   }
 
+  function getColorClass(tag: Tag) {
+    // use colors from utils/colors to get a color for the tag
+    switch (tag.color) {
+      case "primary":
+        return "bg-primary text-primary-content";
+      case "secondary":
+        return "bg-secondary text-secondary-content";
+      case "accent":
+        return "bg-accent text-accent-content";
+      case "neutral":
+        return "bg-neutral text-neutral-content";
+      case "success":
+        return "bg-success text-success-content";
+      case "warning":
+        return "bg-warning text-warning-content";
+      case "error":
+        return "bg-error text-error-content";
+      default:
+        return "bg-primary text-primary-content";
+    }
+  }
+
   useEffect(() => {
     fillTags();
   }, []);
@@ -64,23 +87,21 @@ export function AddTag(props: Props) {
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <div
-              className="flex flex-row gap-2 bg-info w-fit h-fit py-1 pr-3 items-center rounded-full"
+              className={
+                "flex flex-row gap-2 w-fit h-fit py-1 pr-3 items-center rounded-full " +
+                getColorClass(tag)
+              }
               key={tag.id}
             >
               <button
                 title="Remove Tag"
-                className="btn btn-info btn-sm self-start btn-circle"
+                className="btn btn-ghost btn-sm self-start btn-circle"
                 onClick={() => removeTag(tag.id)}
               >
-                <ReactSVG
-                  src="/icons/xmark.svg"
-                  className="w-4 h-4 fill-current mb-0.5"
-                />
+                <ReactSVG src="/icons/xmark.svg" className="w-4 h-4 mb-0.5" />
               </button>
 
-              <span className="text-info-content font-semibold">
-                {tag.name}
-              </span>
+              <span className="font-semibold">{tag.name}</span>
             </div>
           ))}
         </div>

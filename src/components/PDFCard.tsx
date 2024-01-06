@@ -1,10 +1,10 @@
-import { getNewId, getTagColor } from "@/utils";
+import { getNewId } from "@/utils";
 import type { Paper } from "@/types";
 import { EditPDFModal } from "@/components";
 
 import { Link } from "wouter";
 import { ReactSVG } from "react-svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   paper: Paper;
@@ -22,9 +22,24 @@ export function PDFCard(props: Props) {
     setTimeout(() => setTooltipStyle("tooltip-primary"), 5000);
   }
 
-  useEffect(() => {
-    console.log(props.paper.tags);
-  }, [props.paper.tags]);
+  function getBadgeColor(color: string) {
+    switch (color) {
+      case "primary":
+        return "badge-primary";
+      case "secondary":
+        return "badge-secondary";
+      case "accent":
+        return "badge-accent";
+      case "neutral":
+        return "badge-neutral";
+      case "success":
+        return "badge-success";
+      case "warning":
+        return "badge-warning";
+      case "error":
+        return "badge-error";
+    }
+  }
 
   return (
     <div className="card card-compact w-full bg-base-300 text-neutral-content">
@@ -47,7 +62,7 @@ export function PDFCard(props: Props) {
           {props.paper.tags?.map((tag) => (
             <div
               className={
-                "p-2 badge badge-lg badge-outline badge-" + getTagColor()
+                "p-2 badge badge-lg badge-outline " + getBadgeColor(tag.color)
               }
               key={tag.id}
             >

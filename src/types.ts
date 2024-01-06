@@ -6,7 +6,7 @@ export interface Category {
 export interface Tag {
   id: number;
   name: string;
-  // color: string;
+  color: string;
 }
 
 export interface Paper {
@@ -25,7 +25,7 @@ export interface PaperRequest {
   link: string;
   category_id?: number;
   githubLink?: string;
-  // tags?: number[];
+  tags?: number[];
   description?: string;
   citation?: string;
 }

@@ -71,17 +71,15 @@ export function AddPDF(props: Props) {
       return;
     }
 
-    addPaper(
-      {
-        title: title,
-        link: pdfLink,
-        category_id: categoryId,
-        githubLink: githubLink,
-        description: description,
-        citation: citation,
-      },
-      tagId ? [tagId] : []
-    );
+    addPaper({
+      title: title,
+      link: pdfLink,
+      category_id: categoryId,
+      githubLink: githubLink,
+      description: description,
+      citation: citation,
+      tags: tagId ? [tagId] : [],
+    });
 
     clearFields();
 

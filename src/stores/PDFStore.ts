@@ -9,7 +9,7 @@ interface PDFStoreState {
   categories: Category[];
   tags: Tag[];
   setPapers: (papers: Paper[]) => void;
-  addPaper: (paper: PaperRequest, tags: number[]) => void;
+  addPaper: (paper: PaperRequest) => void;
   removePaper: (paperId: number) => void;
   updatePaper: (id: number, paper: PaperRequest) => void;
   getPaperById: (id: string) => Paper | undefined;
@@ -35,18 +35,9 @@ const usePDFStore = create<PDFStoreState>()(
         getPaperById: (id: string) =>
           get().papers.find((paper) => paper.id === parseInt(id)),
         setPapers: (papers: Paper[]) => set({ papers }),
-        addPaper: async (paper: PaperRequest, tags: number[]) => {
+        addPaper: async (paper: PaperRequest) => {
           try {
-            await api.papers.create(paper).then((res) => {
-              const location = res.headers.location;
-              const paperId = location.substring(location.lastIndexOf("/") + 1);
-              try {
-                api.papers.updateTags(parseInt(paperId), tags);
-              } catch (error) {
-                console.log(error);
-              }
-            });
-            get().fillPapers();
+            await api.papers.create(paper).then(() => get().fillPapers());
           } catch (error) {
             console.log(error);
           }
