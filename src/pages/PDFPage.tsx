@@ -75,7 +75,7 @@ export function PDFPage(props: Props) {
         </label>
 
         <PdfLoader
-          url={paper.paperLink}
+          url={paper.link}
           beforeLoad={
             <div className="h-screen w-full items-center justify-center flex flex-row">
               <span className="loading loading-ring loading-lg " />

@@ -16,12 +16,14 @@ export function EditPDFModal(props: Props) {
   const [githubLink, setGithubLink] = useState(props.paper.githubLink);
   const [citation, setCitation] = useState(props.paper.citation);
   const [description, setDescription] = useState(props.paper.description);
-  // const [tagId, setTagId] = useState(props.paper.tags);
+  const [tagId, setTagId] = useState<number | null>(
+    props.paper.tags.length > 0 ? props.paper.tags[0].id : null
+  );
   const [emptyTitle, setEmptyTitle] = useState(false);
   const [emptyPDFLink, setEmptyPDFLink] = useState(false);
   // const [emptyCategory, setEmptyCategory] = useState(false);
 
-  const { categories, updatePaper, removePaper } = usePDFStore(
+  const { tags, categories, updatePaper, removePaper } = usePDFStore(
     (state) => state
   );
 
@@ -63,7 +65,7 @@ export function EditPDFModal(props: Props) {
       githubLink: githubLink,
       citation: citation,
       description: description,
-      tags: [],
+      tags: tagId ? [tagId] : [],
     });
 
     closeModal();
@@ -172,13 +174,10 @@ export function EditPDFModal(props: Props) {
                 ))}
               </select>
 
-              {/* <select
-                className={
-                  "select select-bordered w-full " +
-                  (emptyCategory ? "select-error" : "")
-                }
-                value={tagId}
-                onChange={(e) => setTagId([parseInt(e.target.value)])}
+              <select
+                className="select select-bordered w-full "
+                value={tagId || -1}
+                onChange={(e) => setTagId(parseInt(e.target.value))}
               >
                 <option disabled value={-1}>
                   Pick Tags
@@ -189,7 +188,7 @@ export function EditPDFModal(props: Props) {
                     {tag.name}
                   </option>
                 ))}
-              </select> */}
+              </select>
             </div>
 
             <div className="modal-action flex flex-row w-full justify-around">

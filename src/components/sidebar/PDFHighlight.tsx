@@ -43,8 +43,10 @@ export function PDFHighlight({ highlight, paperId }: Props) {
         ) : null}
 
         <div className="card-body">
-          <h2 className="card-title">
-            {highlight.comment.text}
+          <h2 className="card-title ">
+            <p className="text-ellipsis whitespace-nowrap overflow-hidden inline-block">
+              {highlight.comment.text}
+            </p>
 
             <div className="badge badge-outline badge-secondary">
               {highlight.position.pageNumber}

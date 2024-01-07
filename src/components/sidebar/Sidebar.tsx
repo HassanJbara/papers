@@ -13,10 +13,10 @@ export function Sidebar(props: Props) {
   const highlights = getPaperHighlights(props.paperId);
 
   return (
-    <div className="drawer-side z-50">
+    <div className="drawer-side z-50 w-">
       <label htmlFor="my-drawer" className="drawer-overlay" />
 
-      <aside className="h-full flex flex-col gap-4 p-4 overflow-auto no-scrollbar bg-base-100 lg:max-w-none max-w-xs">
+      <aside className="h-full flex flex-col gap-4 p-4 overflow-auto no-scrollbar bg-base-100 lg:max-w-sm max-w-xs">
         <SidebarHeader title={props.title} />
 
         {highlights.map((highlight, index) => (
