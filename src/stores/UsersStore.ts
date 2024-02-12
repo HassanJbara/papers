@@ -10,6 +10,7 @@ interface UserStoreState {
   getUser: () => Omit<User, "password"> | null;
   errorMessage: string | null;
   resetMessage: () => void;
+  resetUser: () => void;
   resetState: () => void;
 }
 
@@ -31,7 +32,7 @@ const useUserStore = create<UserStoreState>()(
                 .then((res) => {
                   set({
                     user: {
-                      id: res.data.message as number,
+                      id: parseInt(res.data.message as string), // it is returned as a string from the server
                       username: user.username,
                     },
                   });
@@ -54,7 +55,11 @@ const useUserStore = create<UserStoreState>()(
         resetMessage: () => {
           set({ errorMessage: null });
         },
-        resetState: () => set({ user: null, errorMessage: null }),
+        resetUser: () => set({ user: null }),
+        resetState: () => {
+          get().resetMessage();
+          get().resetUser();
+        },
       }),
       {
         name: "user-store",

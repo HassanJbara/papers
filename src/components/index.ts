@@ -7,3 +7,5 @@ export { AddCategory } from "./AddCategory";
 export { AddTag } from "./AddTag";
 export { EditPDFModal } from "./EditPDFModal";
 export { LoginModal } from "./LoginModal";
+export { LoginForm } from "./LoginForm";
+export { LogoutForm } from "./LogoutForm";

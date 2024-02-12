@@ -3090,6 +3090,10 @@ input.tab:checked + .tab-content,
   margin-top: 1rem;
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -3149,18 +3153,6 @@ input.tab:checked + .tab-content,
 
 .h-screen {
   height: 100vh;
-}
-
-.h-2 {
-  height: 0.5rem;
-}
-
-.h-1\/2 {
-  height: 50%;
-}
-
-.max-h-2 {
-  max-height: 0.5rem;
 }
 
 .min-h-screen {
@@ -3224,20 +3216,12 @@ input.tab:checked + .tab-content,
   width: 100%;
 }
 
-.w-2 {
-  width: 0.5rem;
-}
-
 .max-w-md {
   max-width: 28rem;
 }
 
 .max-w-xs {
   max-width: 20rem;
-}
-
-.shrink-0 {
-  flex-shrink: 0;
 }
 
 .cursor-pointer {
@@ -3266,10 +3250,6 @@ input.tab:checked + .tab-content,
 
 .justify-center {
   justify-content: center;
-}
-
-.justify-between {
-  justify-content: space-between;
 }
 
 .justify-around {
@@ -3393,14 +3373,6 @@ input.tab:checked + .tab-content,
 
 .fill-current {
   fill: currentColor;
-}
-
-.fill-red-500 {
-  fill: #ef4444;
-}
-
-.stroke-current {
-  stroke: currentColor;
 }
 
 .p-10 {
@@ -3527,11 +3499,6 @@ input.tab:checked + .tab-content,
 .text-primary-content {
   --tw-text-opacity: 1;
   color: var(--fallback-pc,oklch(var(--pc)/var(--tw-text-opacity)));
-}
-
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .text-secondary-content {
