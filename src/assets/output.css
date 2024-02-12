@@ -629,6 +629,36 @@ html {
   --tw-backdrop-sepia:  ;
 }
 
+.alert {
+  display: grid;
+  width: 100%;
+  grid-auto-flow: row;
+  align-content: flex-start;
+  align-items: center;
+  justify-items: center;
+  gap: 1rem;
+  text-align: center;
+  border-radius: var(--rounded-box, 1rem);
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-b2,oklch(var(--b2)/var(--tw-border-opacity)));
+  padding: 1rem;
+  --tw-text-opacity: 1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+  --alert-bg: var(--fallback-b2,oklch(var(--b2)/1));
+  --alert-bg-mix: var(--fallback-b1,oklch(var(--b1)/1));
+  background-color: var(--alert-bg);
+}
+
+@media (min-width: 640px) {
+  .alert {
+    grid-auto-flow: column;
+    grid-template-columns: auto minmax(auto,1fr);
+    justify-items: start;
+    text-align: start;
+  }
+}
+
 .avatar.placeholder > div {
   display: flex;
   align-items: center;
@@ -665,6 +695,11 @@ html {
 @media (hover:hover) {
   .link-hover:hover {
     text-decoration-line: underline;
+  }
+
+  .checkbox-accent:hover {
+    --tw-border-opacity: 1;
+    border-color: var(--fallback-a,oklch(var(--a)/var(--tw-border-opacity)));
   }
 
   .label a:hover {
@@ -1476,6 +1511,14 @@ input.tab:checked + .tab-content,
   background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
 }
 
+.alert-error {
+  border-color: var(--fallback-er,oklch(var(--er)/0.2));
+  --tw-text-opacity: 1;
+  color: var(--fallback-erc,oklch(var(--erc)/var(--tw-text-opacity)));
+  --alert-bg: var(--fallback-er,oklch(var(--er)/1));
+  --alert-bg-mix: var(--fallback-b1,oklch(var(--b1)/1));
+}
+
 .badge-neutral {
   --tw-border-opacity: 1;
   border-color: var(--fallback-n,oklch(var(--n)/var(--tw-border-opacity)));
@@ -1966,6 +2009,28 @@ input.tab:checked + .tab-content,
   background-image: linear-gradient(90deg, transparent 80%, var(--chkbg) 80%),
       linear-gradient(-90deg, transparent 80%, var(--chkbg) 80%),
       linear-gradient(0deg, var(--chkbg) 43%, var(--chkfg) 43%, var(--chkfg) 57%, var(--chkbg) 57%);
+}
+
+.checkbox-accent {
+  --chkbg: var(--fallback-a,oklch(var(--a)/1));
+  --chkfg: var(--fallback-ac,oklch(var(--ac)/1));
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-a,oklch(var(--a)/var(--tw-border-opacity)));
+}
+
+.checkbox-accent:focus-visible {
+  outline-color: var(--fallback-a,oklch(var(--a)/1));
+}
+
+.checkbox-accent:checked,
+    .checkbox-accent[checked="true"],
+    .checkbox-accent[aria-checked="true"] {
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-a,oklch(var(--a)/var(--tw-border-opacity)));
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-a,oklch(var(--a)/var(--tw-bg-opacity)));
+  --tw-text-opacity: 1;
+  color: var(--fallback-ac,oklch(var(--ac)/var(--tw-text-opacity)));
 }
 
 .checkbox:disabled {
@@ -2510,6 +2575,14 @@ input.tab:checked + .tab-content,
     transform: scale(1);
     opacity: 1;
   }
+}
+
+.badge-xs {
+  height: 0.75rem;
+  font-size: 0.75rem;
+  line-height: .75rem;
+  padding-left: 0.313rem;
+  padding-right: 0.313rem;
 }
 
 .badge-lg {
@@ -3078,6 +3151,18 @@ input.tab:checked + .tab-content,
   height: 100vh;
 }
 
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-1\/2 {
+  height: 50%;
+}
+
+.max-h-2 {
+  max-height: 0.5rem;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -3139,12 +3224,20 @@ input.tab:checked + .tab-content,
   width: 100%;
 }
 
+.w-2 {
+  width: 0.5rem;
+}
+
 .max-w-md {
   max-width: 28rem;
 }
 
 .max-w-xs {
   max-width: 20rem;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
 }
 
 .cursor-pointer {
@@ -3173,6 +3266,10 @@ input.tab:checked + .tab-content,
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .justify-around {
@@ -3209,12 +3306,6 @@ input.tab:checked + .tab-content,
 
 .overflow-y-auto {
   overflow-y: auto;
-}
-
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .text-ellipsis {
@@ -3302,6 +3393,14 @@ input.tab:checked + .tab-content,
 
 .fill-current {
   fill: currentColor;
+}
+
+.fill-red-500 {
+  fill: #ef4444;
+}
+
+.stroke-current {
+  stroke: currentColor;
 }
 
 .p-10 {
@@ -3428,6 +3527,11 @@ input.tab:checked + .tab-content,
 .text-primary-content {
   --tw-text-opacity: 1;
   color: var(--fallback-pc,oklch(var(--pc)/var(--tw-text-opacity)));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .text-secondary-content {

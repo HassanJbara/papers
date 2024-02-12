@@ -1,4 +1,4 @@
-import { AddPDFModal } from "@/components";
+import { AddPDFModal, LoginModal } from "@/components";
 
 export function SiteHeader() {
   return (
@@ -29,6 +29,8 @@ export function SiteHeader() {
         </a>
 
         <AddPDFModal id="add_pdf_modal" />
+
+        <LoginModal id="login_modal" />
       </div>
     </div>
   );

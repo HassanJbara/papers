@@ -24,9 +24,8 @@ export function AddPDFModal(props: Props) {
   return (
     <>
       <button className="btn lg:btn-md btn-sm btn-ghost" onClick={openModal}>
-        <img
+        <ReactSVG
           src="/icons/plus.svg"
-          alt="plus"
           className="lg:w-10 lg:h-10 w-9 h-9 fill-base-content"
         />
       </button>
