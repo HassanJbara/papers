@@ -1,16 +1,15 @@
 import { SiteHeader, PDFCard } from "@/components";
-import { usePDFStore } from "@/stores";
+import { useCategoriesStore, usePDFStore } from "@/stores";
 import { useEffect } from "react";
 
 export function MainPage() {
-  const { categories, papers, fillCategories, fillPapers } = usePDFStore(
-    (state) => state
-  );
+  const { papers, fillPapers } = usePDFStore((state) => state);
+  const { categories, fillCategories } = useCategoriesStore((state) => state);
 
   useEffect(() => {
     fillCategories();
     fillPapers();
-  }, []);
+  }, [fillCategories, fillPapers]);
 
   return (
     <div className="flex flex-col items-center p-10">

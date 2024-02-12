@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { usePDFStore } from "@/stores";
+import { useTagsStore } from "@/stores";
 import { getTagColor } from "@/utils";
 import type { Tag } from "@/types";
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function AddTag(props: Props) {
-  const { addTag, fillTags, removeTag, tags } = usePDFStore((state) => state);
+  const { addTag, fillTags, removeTag, tags } = useTagsStore((state) => state);
   const [tagName, setTagName] = useState("");
   const [showError, setShowError] = useState(false);
   const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +65,7 @@ export function AddTag(props: Props) {
 
   useEffect(() => {
     fillTags();
-  }, []);
+  }, [fillTags]);
 
   return (
     <div className="mt-2">

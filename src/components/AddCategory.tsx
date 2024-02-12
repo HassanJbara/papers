@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { usePDFStore } from "@/stores";
+import { useCategoriesStore } from "@/stores";
 
 interface Props {
   closeModal: () => void;
@@ -9,7 +9,7 @@ interface Props {
 
 export function AddCategory(props: Props) {
   const { addCategory, fillCategories, categories, removeCategory } =
-    usePDFStore((state) => state);
+    useCategoriesStore((state) => state);
   const [categoryName, setCategoryName] = useState("");
   const [showError, setShowError] = useState(false);
   const changeCategoryName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +40,7 @@ export function AddCategory(props: Props) {
 
   useEffect(() => {
     fillCategories();
-  }, []);
+  }, [fillCategories]);
 
   return (
     <div className="mt-2">

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import type { Paper } from "@/types";
-import { usePDFStore } from "@/stores";
+import { useCategoriesStore, usePDFStore, useTagsStore } from "@/stores";
 
 interface Props {
   id: string;
@@ -23,9 +23,9 @@ export function EditPDFModal(props: Props) {
   const [emptyPDFLink, setEmptyPDFLink] = useState(false);
   // const [emptyCategory, setEmptyCategory] = useState(false);
 
-  const { tags, categories, updatePaper, removePaper } = usePDFStore(
-    (state) => state
-  );
+  const { updatePaper, removePaper } = usePDFStore((state) => state);
+  const { tags } = useTagsStore((state) => state);
+  const { categories } = useCategoriesStore((state) => state);
 
   const modal = useRef<HTMLDialogElement | null>(null);
 

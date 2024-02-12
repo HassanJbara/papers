@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-import { usePDFStore } from "@/stores";
+import { useCategoriesStore, usePDFStore, useTagsStore } from "@/stores";
 
 interface Props {
   closeModal: () => void;
 }
 
 export function AddPDF(props: Props) {
-  const { tags, categories, addPaper, fillPapers } = usePDFStore(
-    (state) => state
-  );
+  const { addPaper, fillPapers } = usePDFStore((state) => state);
+  const { tags } = useTagsStore((state) => state);
+  const { categories } = useCategoriesStore((state) => state);
   const [title, setTitle] = useState("");
   const [pdfLink, setPDFLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
