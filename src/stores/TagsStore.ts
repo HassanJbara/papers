@@ -8,8 +8,12 @@ interface TagsStoreState {
   tags: Tag[];
   setTags: (tags: Tag[]) => void;
   addTag: (tag: Omit<Tag, "id">) => void;
+  addTagOffline: (tag: Omit<Tag, "id" | "user_id">) => void;
   removeTag: (tagId: number) => void;
+  removeTagOffline: (tagId: number) => void;
   fillTags: () => void;
+  syncTags: () => void;
+  resetState: () => void;
 }
 
 const useTagsStore = create<TagsStoreState>()(
@@ -25,12 +29,25 @@ const useTagsStore = create<TagsStoreState>()(
             console.log(error);
           }
         },
+        addTagOffline: (tag: Omit<Tag, "id" | "user_id">) => {
+          set((state) => ({
+            tags: [
+              ...state.tags,
+              { ...tag, id: state.tags.length + 1, user_id: null },
+            ],
+          }));
+        },
         removeTag: async (tagId: number) => {
           try {
             await api.tags.delete(tagId).then(() => get().fillTags());
           } catch (error) {
             console.log(error);
           }
+        },
+        removeTagOffline: (tagId: number) => {
+          set((state) => ({
+            tags: state.tags.filter((tag) => tag.id !== tagId),
+          }));
         },
         fillTags: async () => {
           try {
@@ -40,6 +57,11 @@ const useTagsStore = create<TagsStoreState>()(
             console.log(error);
           }
         },
+        syncTags: async () => {
+          // TODO: Implement syncTags
+          return;
+        },
+        resetState: () => set({ tags: [] }),
       }),
       {
         name: "tags-store",

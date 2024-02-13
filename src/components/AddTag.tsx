@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { useTagsStore } from "@/stores";
+import { useTagsStore, useUserStore } from "@/stores";
 import { getTagColor } from "@/utils";
 import type { Tag } from "@/types";
 
@@ -10,9 +10,12 @@ interface Props {
 }
 
 export function AddTag(props: Props) {
-  const { addTag, fillTags, removeTag, tags } = useTagsStore((state) => state);
+  const { addTag, addTagOffline, fillTags, removeTag, removeTagOffline, tags } =
+    useTagsStore((state) => state);
+  const { user } = useUserStore((state) => state);
   const [tagName, setTagName] = useState("");
   const [showError, setShowError] = useState(false);
+
   const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowError(false);
     setTagName(e.target.value);
@@ -33,12 +36,28 @@ export function AddTag(props: Props) {
       return;
     }
 
-    addTag({
-      name: tagName,
-      color: getTagColor(),
-    });
+    if (!user) {
+      addTagOffline({
+        name: tagName,
+        color: getTagColor(),
+      });
+    } else {
+      addTag({
+        name: tagName,
+        color: getTagColor(),
+        user_id: user.id,
+      });
+    }
 
     clearFields();
+  }
+
+  function remove(tagId: number) {
+    if (!user) {
+      removeTagOffline(tagId);
+    } else {
+      removeTag(tagId);
+    }
   }
 
   function getColorClass(tag: Tag) {
@@ -64,8 +83,10 @@ export function AddTag(props: Props) {
   }
 
   useEffect(() => {
-    fillTags();
-  }, [fillTags]);
+    if (user) {
+      fillTags();
+    }
+  }, [user, fillTags]);
 
   return (
     <div className="mt-2">
@@ -96,7 +117,7 @@ export function AddTag(props: Props) {
               <button
                 title="Remove Tag"
                 className="btn btn-ghost btn-sm self-start btn-circle"
-                onClick={() => removeTag(tag.id)}
+                onClick={() => remove(tag.id)}
               >
                 <ReactSVG src="/icons/xmark.svg" className="w-4 h-4 mb-0.5" />
               </button>

@@ -8,10 +8,17 @@ interface PDFStoreState {
   papers: Paper[];
   setPapers: (papers: Paper[]) => void;
   addPaper: (paper: PaperRequest) => void;
+  addPaperOffline: (paper: Omit<Paper, "id" | "user_id">) => void;
   removePaper: (paperId: number) => void;
+  removePaperOffline: (paperId: number) => void;
   updatePaper: (id: number, paper: PaperRequest) => void;
+  updatePaperOffline: (
+    id: number,
+    paper: Omit<Paper, "id" | "user_id">
+  ) => void;
   getPaperById: (id: string) => Paper | undefined;
   fillPapers: () => void;
+  syncPapers: () => void;
   resetState: () => void;
 }
 
@@ -30,6 +37,18 @@ const usePDFStore = create<PDFStoreState>()(
             console.log(error);
           }
         },
+        addPaperOffline: (paper: Omit<Paper, "id" | "user_id">) => {
+          set((state) => ({
+            papers: [
+              ...state.papers,
+              {
+                ...paper,
+                id: state.papers.length + 1,
+                user_id: null,
+              },
+            ],
+          }));
+        },
         updatePaper: async (id: number, paper: PaperRequest) => {
           try {
             await api.papers.update(id, paper);
@@ -37,6 +56,16 @@ const usePDFStore = create<PDFStoreState>()(
           } catch (error) {
             console.log(error);
           }
+        },
+        updatePaperOffline: (
+          id: number,
+          paper: Omit<Paper, "id" | "user_id">
+        ) => {
+          set((state) => ({
+            papers: state.papers.map((p) =>
+              p.id === id ? { ...paper, id, user_id: null } : p
+            ),
+          }));
         },
         removePaper: async (paperId: number) => {
           try {
@@ -46,6 +75,11 @@ const usePDFStore = create<PDFStoreState>()(
             console.log(error);
           }
         },
+        removePaperOffline: (paperId: number) => {
+          set((state) => ({
+            papers: state.papers.filter((paper) => paper.id !== paperId),
+          }));
+        },
         fillPapers: async () => {
           try {
             const papersData = await api.papers.getAll();
@@ -53,6 +87,10 @@ const usePDFStore = create<PDFStoreState>()(
           } catch (error) {
             console.log(error);
           }
+        },
+        syncPapers: async () => {
+          // TODO: Implement syncPapers
+          return;
         },
         resetState: () => set({ papers: [] }),
       }),

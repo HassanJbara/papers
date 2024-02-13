@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { useCategoriesStore } from "@/stores";
+import { useCategoriesStore, useUserStore } from "@/stores";
 
 interface Props {
   closeModal: () => void;
 }
 
 export function AddCategory(props: Props) {
-  const { addCategory, fillCategories, categories, removeCategory } =
-    useCategoriesStore((state) => state);
+  const {
+    addCategory,
+    addCategoryOffline,
+    fillCategories,
+    categories,
+    removeCategory,
+    removeCategoryOffline,
+  } = useCategoriesStore((state) => state);
+  const { user } = useUserStore((state) => state);
   const [categoryName, setCategoryName] = useState("");
   const [showError, setShowError] = useState(false);
+
   const changeCategoryName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowError(false);
     setCategoryName(e.target.value);
@@ -33,14 +41,28 @@ export function AddCategory(props: Props) {
       return;
     }
 
-    addCategory({ name: categoryName });
+    if (!user) {
+      addCategoryOffline({ name: categoryName });
+    } else {
+      addCategory({ name: categoryName, user_id: user?.id });
+    }
 
     clearFields();
   }
 
+  function remove(categoryId: number) {
+    if (!user) {
+      removeCategoryOffline(categoryId);
+    } else {
+      removeCategory(categoryId);
+    }
+  }
+
   useEffect(() => {
-    fillCategories();
-  }, [fillCategories]);
+    if (user) {
+      fillCategories();
+    }
+  }, [user, fillCategories]);
 
   return (
     <div className="mt-2">
@@ -68,7 +90,7 @@ export function AddCategory(props: Props) {
               <button
                 title="Remove Category"
                 className="btn btn-info btn-sm self-start btn-circle"
-                onClick={() => removeCategory(category.id)}
+                onClick={() => remove(category.id)}
               >
                 <ReactSVG
                   src="/icons/xmark.svg"

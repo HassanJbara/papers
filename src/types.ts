@@ -7,14 +7,14 @@ export interface User {
 export interface Category {
   id: number;
   name: string;
-  user_id: number;
+  user_id: number | null;
 }
 
 export interface Tag {
   id: number;
   name: string;
   color: string;
-  user_id: number;
+  user_id: number | null;
 }
 
 export interface Paper {
@@ -26,7 +26,7 @@ export interface Paper {
   githubLink?: string;
   description?: string;
   citation: string;
-  user_id: number;
+  user_id: number | null;
 }
 
 export interface PaperRequest {
@@ -37,5 +37,5 @@ export interface PaperRequest {
   tags?: number[];
   description?: string;
   citation?: string;
-  user_id: number;
+  user_id: number | null;
 }

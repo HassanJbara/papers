@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import type { Paper } from "@/types";
-import { useCategoriesStore, usePDFStore, useTagsStore } from "@/stores";
+import {
+  useCategoriesStore,
+  usePDFStore,
+  useTagsStore,
+  useUserStore,
+} from "@/stores";
 
 interface Props {
   id: string;
@@ -10,6 +15,12 @@ interface Props {
 }
 
 export function EditPDFModal(props: Props) {
+  const { updatePaper, updatePaperOffline, removePaper, removePaperOffline } =
+    usePDFStore((state) => state);
+  const { tags } = useTagsStore((state) => state);
+  const { categories } = useCategoriesStore((state) => state);
+  const { user } = useUserStore((state) => state);
+
   const [title, setTitle] = useState(props.paper.title);
   const [categoryId, setCategoryId] = useState(props.paper.category?.id);
   const [pdfLink, setPDFLink] = useState(props.paper.link);
@@ -22,10 +33,6 @@ export function EditPDFModal(props: Props) {
   const [emptyTitle, setEmptyTitle] = useState(false);
   const [emptyPDFLink, setEmptyPDFLink] = useState(false);
   // const [emptyCategory, setEmptyCategory] = useState(false);
-
-  const { updatePaper, removePaper } = usePDFStore((state) => state);
-  const { tags } = useTagsStore((state) => state);
-  const { categories } = useCategoriesStore((state) => state);
 
   const modal = useRef<HTMLDialogElement | null>(null);
 
@@ -58,15 +65,30 @@ export function EditPDFModal(props: Props) {
       return;
     }
 
-    updatePaper(props.paper.id, {
-      title: title,
-      link: pdfLink,
-      category_id: categoryId,
-      githubLink: githubLink,
-      citation: citation,
-      description: description,
-      tags: tagId ? [tagId] : [],
-    });
+    if (!user) {
+      updatePaperOffline(props.paper.id, {
+        title: title,
+        link: pdfLink,
+        githubLink: githubLink,
+        citation: citation,
+        description: description,
+        category: categoryId
+          ? categories.find((c) => c.id === categoryId) || null
+          : null,
+        tags: tagId ? tags.filter((t) => t.id === tagId) : [],
+      });
+    } else {
+      updatePaper(props.paper.id, {
+        title: title,
+        link: pdfLink,
+        category_id: categoryId,
+        githubLink: githubLink,
+        citation: citation,
+        description: description,
+        tags: tagId ? [tagId] : [],
+        user_id: user.id,
+      });
+    }
 
     closeModal();
   }
@@ -85,7 +107,12 @@ export function EditPDFModal(props: Props) {
   }
 
   function remove() {
-    removePaper(props.paper.id);
+    if (!user) {
+      removePaperOffline(props.paper.id);
+    } else {
+      removePaper(props.paper.id);
+    }
+
     closeModal();
   }
 

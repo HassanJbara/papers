@@ -1,15 +1,24 @@
 import { useState } from "react";
 
-import { useCategoriesStore, usePDFStore, useTagsStore } from "@/stores";
+import {
+  useCategoriesStore,
+  usePDFStore,
+  useTagsStore,
+  useUserStore,
+} from "@/stores";
 
 interface Props {
   closeModal: () => void;
 }
 
 export function AddPDF(props: Props) {
-  const { addPaper, fillPapers } = usePDFStore((state) => state);
+  const { addPaper, addPaperOffline, fillPapers } = usePDFStore(
+    (state) => state
+  );
   const { tags } = useTagsStore((state) => state);
   const { categories } = useCategoriesStore((state) => state);
+  const { user } = useUserStore((state) => state);
+
   const [title, setTitle] = useState("");
   const [pdfLink, setPDFLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
@@ -71,18 +80,29 @@ export function AddPDF(props: Props) {
       return;
     }
 
-    addPaper({
-      title: title,
-      link: pdfLink,
-      category_id: categoryId,
-      githubLink: githubLink,
-      description: description,
-      citation: citation,
-      tags: tagId ? [tagId] : [],
-    });
+    if (!user) {
+      addPaperOffline({
+        title,
+        link: pdfLink,
+        citation: citation,
+        tags: tags.filter((tag) => tag.id === tagId),
+        category:
+          categories.find((category) => category.id === categoryId) || null,
+      });
+    } else {
+      addPaper({
+        title: title,
+        link: pdfLink,
+        category_id: categoryId,
+        githubLink: githubLink,
+        description: description,
+        citation: citation,
+        tags: tagId ? [tagId] : [],
+        user_id: user.id,
+      });
+    }
 
     clearFields();
-
     props.closeModal();
   }
 
