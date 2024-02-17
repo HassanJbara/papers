@@ -2,7 +2,7 @@
 FROM node:21-alpine
 
 # set environment variables
-ENV PORT 5173
+ENV PORT 80
 
 # Set the working directory in the container
 WORKDIR /app

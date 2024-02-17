@@ -3375,6 +3375,10 @@ input.tab:checked + .tab-content,
   fill: currentColor;
 }
 
+.fill-primary-content {
+  fill: var(--fallback-pc,oklch(var(--pc)/1));
+}
+
 .p-10 {
   padding: 2.5rem;
 }

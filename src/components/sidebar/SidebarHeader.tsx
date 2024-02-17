@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ReactSVG } from "react-svg";
 import { Link } from "wouter";
 
 interface Props {
@@ -32,7 +33,10 @@ export function SidebarHeader(props: Props) {
             className="btn btn-primary btn-sm btn-circle"
             onClick={() => setScale(scale > 0.25 ? scale - 0.25 : 0.25)}
           >
-            <img alt="minus" src="/icons/minus.svg" className="w-7 h-7" />
+            <ReactSVG
+              src="/icons/minus.svg"
+              className="w-7 h-7 fill-primary-content"
+            />
           </button>
 
           <span className="py-0.5 px-1.5 border border-base-content rounded-xl text-lg">
@@ -43,7 +47,10 @@ export function SidebarHeader(props: Props) {
             className="btn btn-primary btn-sm btn-circle"
             onClick={() => setScale(scale + 0.25)}
           >
-            <img alt="plus" src="/icons/plus.svg" className="w-7 h-7" />
+            <ReactSVG
+              src="/icons/plus.svg"
+              className="w-7 h-7 fill-primary-content"
+            />
           </button>
         </div>
       </div>
