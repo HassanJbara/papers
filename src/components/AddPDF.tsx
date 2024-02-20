@@ -6,6 +6,7 @@ import {
   useTagsStore,
   useUserStore,
 } from "@/stores";
+import { AddModalButtons } from "@/components";
 
 interface Props {
   closeModal: () => void;
@@ -29,6 +30,7 @@ export function AddPDF(props: Props) {
   const [emptyTitle, setEmptyTitle] = useState(false);
   const [emptyPDFLink, setEmptyPDFLink] = useState(false);
   const [emptyCategory, setEmptyCategory] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmptyTitle(false);
@@ -110,6 +112,13 @@ export function AddPDF(props: Props) {
     clearFields();
 
     props.closeModal();
+  }
+
+  async function refresh() {
+    setLoading(true);
+    await fillPapers()
+      .then(() => setLoading(false))
+      .catch(() => setLoading(false));
   }
 
   return (
@@ -199,19 +208,13 @@ export function AddPDF(props: Props) {
         </select>
       </div>
 
-      <div className="modal-action flex flex-row w-full justify-around">
-        <button className="btn btn-primary" onClick={add}>
-          Add
-        </button>
-
-        <button className="btn btn-success mx-2" onClick={fillPapers}>
-          Refresh
-        </button>
-
-        <button className="btn btn-warning" onClick={cancel}>
-          Cancel
-        </button>
-      </div>
+      <AddModalButtons
+        cancel={cancel}
+        add={add}
+        refresh={refresh}
+        loading={loading}
+        user={user}
+      />
     </div>
   );
 }

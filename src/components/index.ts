@@ -9,3 +9,4 @@ export { EditPDFModal } from "./EditPDFModal";
 export { LoginModal } from "./LoginModal";
 export { LoginForm } from "./LoginForm";
 export { LogoutForm } from "./LogoutForm";
+export { AddModalButtons } from "./AddModalButtons";

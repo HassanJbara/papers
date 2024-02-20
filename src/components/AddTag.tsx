@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { useTagsStore, useUserStore } from "@/stores";
+import { AddModalButtons } from "@/components";
 import { getTagColor } from "@/utils";
 import type { Tag } from "@/types";
 
@@ -15,6 +16,7 @@ export function AddTag(props: Props) {
   const { user } = useUserStore((state) => state);
   const [tagName, setTagName] = useState("");
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const changeTagName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowError(false);
@@ -82,6 +84,13 @@ export function AddTag(props: Props) {
     }
   }
 
+  async function refresh() {
+    setLoading(true);
+    await fillTags()
+      .then(() => setLoading(false))
+      .catch(() => setLoading(false));
+  }
+
   useEffect(() => {
     if (user) {
       fillTags();
@@ -128,19 +137,13 @@ export function AddTag(props: Props) {
         </div>
       </div>
 
-      <div className="modal-action flex flex-row w-full justify-around">
-        <button className="btn btn-primary" onClick={add}>
-          Add
-        </button>
-
-        <button className="btn btn-success" onClick={fillTags}>
-          Refresh
-        </button>
-
-        <button className="btn btn-warning" onClick={cancel}>
-          Cancel
-        </button>
-      </div>
+      <AddModalButtons
+        cancel={cancel}
+        add={add}
+        refresh={refresh}
+        loading={loading}
+        user={user}
+      />
     </div>
   );
 }

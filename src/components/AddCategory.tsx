@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { useCategoriesStore, useUserStore } from "@/stores";
+import { AddModalButtons } from "@/components";
 
 interface Props {
   closeModal: () => void;
@@ -19,6 +20,7 @@ export function AddCategory(props: Props) {
   const { user } = useUserStore((state) => state);
   const [categoryName, setCategoryName] = useState("");
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const changeCategoryName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowError(false);
@@ -56,6 +58,13 @@ export function AddCategory(props: Props) {
     } else {
       removeCategory(categoryId);
     }
+  }
+
+  async function refresh() {
+    setLoading(true);
+    await fillCategories()
+      .then(() => setLoading(false))
+      .catch(() => setLoading(false));
   }
 
   useEffect(() => {
@@ -106,19 +115,13 @@ export function AddCategory(props: Props) {
         </div>
       </div>
 
-      <div className="modal-action flex flex-row w-full justify-around">
-        <button className="btn btn-primary" onClick={add}>
-          Add
-        </button>
-
-        <button className="btn btn-success" onClick={fillCategories}>
-          Refresh
-        </button>
-
-        <button className="btn btn-warning" onClick={cancel}>
-          Cancel
-        </button>
-      </div>
+      <AddModalButtons
+        cancel={cancel}
+        add={add}
+        refresh={refresh}
+        loading={loading}
+        user={user}
+      />
     </div>
   );
 }

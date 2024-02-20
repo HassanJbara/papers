@@ -17,7 +17,7 @@ interface PDFStoreState {
     paper: Omit<Paper, "id" | "user_id">
   ) => void;
   getPaperById: (id: string) => Paper | undefined;
-  fillPapers: () => void;
+  fillPapers: () => Promise<void>;
   syncPapers: () => void;
   resetState: () => void;
 }
@@ -81,12 +81,18 @@ const usePDFStore = create<PDFStoreState>()(
           }));
         },
         fillPapers: async () => {
-          try {
-            const papersData = await api.papers.getAll();
-            set({ papers: papersData.data });
-          } catch (error) {
-            console.log(error);
-          }
+          return new Promise<void>((resolve, reject) => {
+            api.papers
+              .getAll()
+              .then((papersData) => {
+                set({ papers: papersData.data });
+                resolve();
+              })
+              .catch((error) => {
+                console.log(error);
+                reject(error);
+              });
+          });
         },
         syncPapers: async () => {
           // TODO: Implement syncPapers

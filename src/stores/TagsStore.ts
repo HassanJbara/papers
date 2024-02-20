@@ -11,7 +11,7 @@ interface TagsStoreState {
   addTagOffline: (tag: Omit<Tag, "id" | "user_id">) => void;
   removeTag: (tagId: number) => void;
   removeTagOffline: (tagId: number) => void;
-  fillTags: () => void;
+  fillTags: () => Promise<void>;
   syncTags: () => void;
   resetState: () => void;
 }
@@ -50,12 +50,18 @@ const useTagsStore = create<TagsStoreState>()(
           }));
         },
         fillTags: async () => {
-          try {
-            const tagsData = await api.tags.getAll();
-            set({ tags: tagsData.data });
-          } catch (error) {
-            console.log(error);
-          }
+          return new Promise((resolve, reject) => {
+            api.tags
+              .getAll()
+              .then((tagsData) => {
+                set({ tags: tagsData.data });
+                resolve();
+              })
+              .catch((error) => {
+                console.log(error);
+                reject(error);
+              });
+          });
         },
         syncTags: async () => {
           // TODO: Implement syncTags

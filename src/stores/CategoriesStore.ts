@@ -11,7 +11,7 @@ interface CategoriesStoreState {
   addCategoryOffline: (category: Omit<Category, "id" | "user_id">) => void;
   removeCategory: (categoryId: number) => void;
   removeCategoryOffline: (categoryId: number) => void;
-  fillCategories: () => void;
+  fillCategories: () => Promise<void>;
   syncCategories: () => void;
   resetState: () => void;
 }
@@ -57,12 +57,18 @@ const useCategoriesStore = create<CategoriesStoreState>()(
           set({ categories: newCategories });
         },
         fillCategories: async () => {
-          try {
-            const categoriesData = await api.categories.getAll();
-            set({ categories: categoriesData.data });
-          } catch (error) {
-            console.log(error);
-          }
+          return new Promise((resolve, reject) => {
+            api.categories
+              .getAll()
+              .then((categoriesData) => {
+                set({ categories: categoriesData.data });
+                resolve();
+              })
+              .catch((error) => {
+                console.log(error);
+                reject(error);
+              });
+          });
         },
         syncCategories: async () => {
           // TODO: implement syncCategories
