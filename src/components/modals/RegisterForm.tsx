@@ -6,27 +6,32 @@ interface Props {
   closeModal: () => void;
 }
 
-export function LoginForm(props: Props) {
+export function RegisterForm(props: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [emptyUsername, setEmptyUsername] = useState(false);
-  const [emptyPassword, setEmptyPassword] = useState(false);
-  const [invalidCredentials, setInvalidCredentials] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const [emptyPassword, setEmptyPassword] = useState(false);
+  const [emptyUsername, setEmptyUsername] = useState(false);
+  const [passwordsDontMatch, setPasswordsDontMatch] = useState(false);
+  const [emptyRepeatPassword, setEmptyRepeatPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const { login, resetMessage, errorMessage, user } = useUserStore();
+  const { register } = useUserStore();
 
   function resetErrors() {
     setEmptyUsername(false);
     setEmptyPassword(false);
-    setInvalidCredentials(false);
-    resetMessage();
+    setEmptyRepeatPassword(false);
+    setPasswordsDontMatch(false);
   }
 
   function clearFields() {
     setUsername("");
     setPassword("");
+    setRepeatPassword("");
   }
 
   function resetModal() {
@@ -38,12 +43,26 @@ export function LoginForm(props: Props) {
   function validateFields() {
     // check if a necessary field is empty
     if (!username) {
+      setErrorMessage("Please enter a username.");
       setEmptyUsername(true);
       return false;
     }
 
     if (!password) {
+      setErrorMessage("Please enter a password.");
       setEmptyPassword(true);
+      return false;
+    }
+
+    if (!repeatPassword) {
+      setErrorMessage("Please repeat your password.");
+      setEmptyRepeatPassword(true);
+      return false;
+    }
+
+    if (password !== repeatPassword) {
+      setErrorMessage("Passwords don't match.");
+      setPasswordsDontMatch(true);
       return false;
     }
 
@@ -59,14 +78,13 @@ export function LoginForm(props: Props) {
 
     setLoading(true);
 
-    await login({ username: username, password: password })
+    await register({ username: username, password: password })
       .then(() => {
-        if (user) {
-          props.closeModal();
-        }
+        setSuccess(true);
+        resetModal();
       })
-      .catch(() => {
-        setInvalidCredentials(true);
+      .catch((error) => {
+        setErrorMessage(error);
         setLoading(false);
       });
   }
@@ -87,7 +105,7 @@ export function LoginForm(props: Props) {
           id="username"
           type="text"
           className={`input input-bordered ${
-            emptyUsername || invalidCredentials ? "input-error" : ""
+            emptyUsername ? "input-error" : ""
           }`}
           placeholder="Username"
           value={username}
@@ -98,11 +116,22 @@ export function LoginForm(props: Props) {
           id="password"
           type={showPassword ? "text" : "password"}
           className={`input input-bordered ${
-            emptyPassword || invalidCredentials ? "input-error" : ""
+            emptyPassword || passwordsDontMatch ? "input-error" : ""
           }`}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <input
+          id="repeat_password"
+          type={showPassword ? "text" : "password"}
+          className={`input input-bordered ${
+            emptyRepeatPassword || passwordsDontMatch ? "input-error" : ""
+          }`}
+          placeholder="Repeat Password"
+          value={repeatPassword}
+          onChange={(e) => setRepeatPassword(e.target.value)}
         />
 
         <div className="flex flex-row items-center gap-2">
@@ -118,12 +147,19 @@ export function LoginForm(props: Props) {
         </div>
       </div>
 
-      {errorMessage ? (
+      {errorMessage && (
         <div role="alert" className="alert alert-error mt-4">
           <ReactSVG src="/icons/error.svg" className="h-5 w-5 fill-current" />
-          <span>{errorMessage}</span>
+          <span className="font-semibold">{errorMessage}</span>
         </div>
-      ) : null}
+      )}
+
+      {success && (
+        <div role="alert" className="alert alert-success mt-4">
+          <ReactSVG src="/icons/check.svg" className="h-5 w-5 fill-current" />
+          <span className="font-semibold">Registration successful!</span>
+        </div>
+      )}
 
       <div className="modal-action flex flex-row w-full justify-around">
         <button
@@ -131,7 +167,7 @@ export function LoginForm(props: Props) {
           disabled={loading}
           onClick={async () => await submitModal()}
         >
-          {loading ? "Loading..." : "Login"}
+          {loading ? "Loading..." : "Register"}
         </button>
 
         <button className="btn btn-warning" onClick={cancel}>

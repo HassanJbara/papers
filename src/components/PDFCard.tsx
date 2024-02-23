@@ -1,6 +1,6 @@
 import { getNewId } from "@/utils";
 import type { Paper } from "@/types";
-import { EditPDFModal } from "@/components";
+import { EditPDFModal } from "@/components/modals";
 
 import { Link } from "wouter";
 import { ReactSVG } from "react-svg";

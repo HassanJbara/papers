@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { useTagsStore, useUserStore } from "@/stores";
-import { AddModalButtons } from "@/components";
+import { AddModalButtons } from "@/components/modals";
 import { getTagColor } from "@/utils";
 import type { Tag } from "@/types";
 

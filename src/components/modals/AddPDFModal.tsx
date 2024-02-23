@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { AddCategory, AddPDF, AddTag } from "@/components";
+import { AddCategory, AddPDF, AddTag } from "@/components/modals";
 
 interface Props {
   id: string;

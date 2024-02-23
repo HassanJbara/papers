@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { useCategoriesStore, useUserStore } from "@/stores";
-import { AddModalButtons } from "@/components";
+import { AddModalButtons } from "@/components/modals";
 
 interface Props {
   closeModal: () => void;

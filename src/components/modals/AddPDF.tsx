@@ -6,7 +6,7 @@ import {
   useTagsStore,
   useUserStore,
 } from "@/stores";
-import { AddModalButtons } from "@/components";
+import { AddModalButtons } from "@/components/modals";
 
 interface Props {
   closeModal: () => void;
