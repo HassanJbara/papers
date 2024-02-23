@@ -1,0 +1,21 @@
+stages:    
+  - build
+  - deploy
+
+build-job:
+  image: node:21-alpine
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    when: on_success
+    expire_in: 30 days
+    paths:
+        - "./dist"
+
+.deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
