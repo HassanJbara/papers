@@ -1,3 +1,4 @@
+import highlights from "@/api/modules/highlights";
 import categories from "@/api/modules/categories";
 import papers from "@/api/modules/papers";
 import users from "@/api/modules/users";
@@ -8,6 +9,7 @@ const api = {
   papers,
   tags,
   users,
+  highlights,
 };
 
 export default api;

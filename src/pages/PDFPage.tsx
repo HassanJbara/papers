@@ -6,12 +6,12 @@ import {
   Popup,
   AreaHighlight,
 } from "react-pdf-highlighter";
+import { ReactSVG } from "react-svg";
 
-import { HighlightOptions } from "@/components";
 import { Sidebar } from "@/components/sidebar";
+import { HighlightOptions } from "@/components";
 import { useHighlightsStore, usePDFStore } from "@/stores";
 import { getNewId, parseIdFromHash, resetHash, updateHighlight } from "@/utils";
-import { ReactSVG } from "react-svg";
 
 interface Props {
   pdfId: string;
@@ -112,11 +112,13 @@ export function PDFPage(props: Props) {
                 <HighlightOptions
                   onOpen={transformSelection}
                   onConfirm={(comment) => {
-                    addHighlight(parseInt(props.pdfId), {
-                      content,
-                      position,
-                      comment,
-                      id: getNewId(),
+                    addHighlight({
+                      position: position,
+                      comment: comment.text,
+                      comment_emoji: comment.emoji,
+                      text: content.text || "",
+                      image: content.image || "",
+                      pdf_id: parseInt(props.pdfId),
                     });
                     hideTipAndSelection();
                   }}

@@ -1,18 +1,25 @@
 import { SiteHeader, PDFCard } from "@/components";
-import { useCategoriesStore, usePDFStore, useUserStore } from "@/stores";
+import {
+  useCategoriesStore,
+  useHighlightsStore,
+  usePDFStore,
+  useUserStore,
+} from "@/stores";
 import { useEffect } from "react";
 
 export function MainPage() {
   const { papers, fillPapers } = usePDFStore((state) => state);
   const { categories, fillCategories } = useCategoriesStore((state) => state);
   const { user } = useUserStore((state) => state);
+  const { fillHighlights } = useHighlightsStore((state) => state);
 
   useEffect(() => {
     if (user) {
       fillCategories();
       fillPapers();
+      fillHighlights();
     }
-  }, [user, fillCategories, fillPapers]);
+  }, [user, fillCategories, fillPapers, fillHighlights]);
 
   return (
     <div className="flex flex-col items-center p-10">

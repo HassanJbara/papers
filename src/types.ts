@@ -1,3 +1,5 @@
+import type { IHighlight, ScaledPosition } from "react-pdf-highlighter";
+
 export interface User {
   id: number;
   username: string;
@@ -38,4 +40,17 @@ export interface PaperRequest {
   description?: string;
   citation?: string;
   user_id: number | null;
+}
+
+export interface Highlight extends IHighlight {
+  pdf: Paper;
+}
+
+export interface HighlightRequest {
+  text: string;
+  image: string;
+  comment: string;
+  comment_emoji: string;
+  position: ScaledPosition;
+  pdf_id: number;
 }
