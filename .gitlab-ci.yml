@@ -10,6 +10,7 @@ build-job:
   image: node:21-alpine
   stage: build
   script:
+    - npm install
     - npm run build
   artifacts:
     when: on_success
