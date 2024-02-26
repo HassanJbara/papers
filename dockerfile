@@ -3,6 +3,7 @@ FROM node:21-alpine
 
 # set environment variables
 ENV PORT 80
+ENV VITE_BACKEND_URL "http://localhost:8080"
 
 # Set the working directory in the container
 WORKDIR /app

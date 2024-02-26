@@ -61,3 +61,4 @@ deploy-job:
         --resource-group $AZURE_RESOURCE_GROUP 
         --ingress external 
         --target-port 80
+        --env-vars "VITE_BACKEND_URL=$VITE_BACKEND_URL"
