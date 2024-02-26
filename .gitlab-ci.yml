@@ -8,6 +8,7 @@ variables:
     DOCKER_TLS_CERTDIR: "/certs"
     DOCKER_TAG: "0.6"
     APP_NAME: "papers/frontend"
+    PORT: "80"
 
 
 build-job:
@@ -29,7 +30,9 @@ build-image-job:
   services:
     - docker:25.0.3-dind
   script:
-    - docker build -t $DOCKER_REPO/$APP_NAME:$DOCKER_TAG .
+    - docker build 
+        --build-arg VITE_BACKEND_URL=$VITE_BACKEND_URL
+        -t $DOCKER_REPO/$APP_NAME:$DOCKER_TAG .
     - docker login $DOCKER_REPO -u $REPO_USER -p $REPO_PASS
     - docker push $DOCKER_REPO/$APP_NAME:$DOCKER_TAG
 
@@ -60,5 +63,5 @@ deploy-job:
         --registry-password $REPO_PASS 
         --resource-group $AZURE_RESOURCE_GROUP 
         --ingress external 
-        --target-port 80
-        --env-vars "VITE_BACKEND_URL=$VITE_BACKEND_URL"
+        --target-port $PORT
+        --env-vars "PORT=$PORT"
