@@ -4,6 +4,7 @@ import { ReactSVG } from "react-svg";
 import type { Paper } from "@/types";
 import {
   useCategoriesStore,
+  useHighlightsStore,
   usePDFStore,
   useTagsStore,
   useUserStore,
@@ -20,6 +21,7 @@ export function EditPDFModal(props: Props) {
   const { tags } = useTagsStore((state) => state);
   const { categories } = useCategoriesStore((state) => state);
   const { user } = useUserStore((state) => state);
+  const { setPaperHighlights } = useHighlightsStore((state) => state);
 
   const [title, setTitle] = useState(props.paper.title);
   const [categoryId, setCategoryId] = useState(props.paper.category?.id);
@@ -109,6 +111,7 @@ export function EditPDFModal(props: Props) {
   function remove() {
     if (!user) {
       removePaperOffline(props.paper.id);
+      setPaperHighlights(props.paper.id, []);
     } else {
       removePaper(props.paper.id);
     }

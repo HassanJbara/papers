@@ -20,6 +20,7 @@ interface HighlightsStoreState {
   ) => IHighlight | undefined;
   getPaperHighlights: (paperId: number) => IHighlight[];
   fillHighlights: () => Promise<void>;
+  resetState: () => void;
 }
 
 const useHighlightsStore = create<HighlightsStoreState>()(
@@ -89,6 +90,7 @@ const useHighlightsStore = create<HighlightsStoreState>()(
             resolve();
           });
         },
+        resetState: () => set({ highlights: [] }),
       }),
       {
         name: "highlights-store",
