@@ -15,14 +15,15 @@ export function LoginForm(props: Props) {
   const [invalidCredentials, setInvalidCredentials] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const { login, resetMessage, errorMessage, user } = useUserStore();
+  const { login, user } = useUserStore();
 
   function resetErrors() {
     setEmptyUsername(false);
     setEmptyPassword(false);
     setInvalidCredentials(false);
-    resetMessage();
+    setErrorMessage(null);
   }
 
   function clearFields() {
@@ -39,11 +40,13 @@ export function LoginForm(props: Props) {
   function validateFields() {
     // check if a necessary field is empty
     if (!username) {
+      setErrorMessage("Please enter a username.");
       setEmptyUsername(true);
       return false;
     }
 
     if (!password) {
+      setErrorMessage("Please enter a password.");
       setEmptyPassword(true);
       return false;
     }
@@ -66,7 +69,8 @@ export function LoginForm(props: Props) {
           props.closeModal();
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        setErrorMessage(error);
         setInvalidCredentials(true);
         setLoading(false);
       });

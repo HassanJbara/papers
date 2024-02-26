@@ -1,0 +1,67 @@
+stages:    
+  - build
+  - deploy
+default:
+  tags: 
+    - hassan
+variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TAG: "0.6"
+    APP_NAME: "papers/frontend"
+    PORT: "80"
+
+
+build-job:
+  image: node:21-alpine
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    when: on_success
+    expire_in: 30 days
+    paths:
+        - "./dist"
+
+build-image-job:
+  stage: build
+  image: docker:25.0.3-cli
+
+  services:
+    - docker:25.0.3-dind
+  script:
+    - docker build 
+        --build-arg VITE_BACKEND_URL=$VITE_BACKEND_URL
+        -t $DOCKER_REPO/$APP_NAME:$DOCKER_TAG .
+    - docker login $DOCKER_REPO -u $REPO_USER -p $REPO_PASS
+    - docker push $DOCKER_REPO/$APP_NAME:$DOCKER_TAG
+
+deploy-job:
+  stage: deploy
+  environment: production
+  image: 
+    name: bitnami/azure-cli:2.57.0
+    entrypoint: [""]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  variables:
+    CONTAINER_APP_NAME: "papers-app"
+    AZURE_RESOURCE_GROUP: "hasjbatest"
+
+  script:
+    - az login -u $AZURE_USER -p $AZURE_PASS
+    - az account list --refresh
+    - az account set -s $AZURE_SUBSCRIPTION_ID
+    - az extension add --name containerapp --upgrade
+    - az provider register --namespace Microsoft.App
+    - az provider register --namespace Microsoft.OperationalInsights
+    - az containerapp up 
+        --name $CONTAINER_APP_NAME 
+        --image $DOCKER_REPO/$APP_NAME:$DOCKER_TAG 
+        --registry-server $DOCKER_REPO 
+        --registry-username $REPO_USER 
+        --registry-password $REPO_PASS 
+        --resource-group $AZURE_RESOURCE_GROUP 
+        --ingress external 
+        --target-port $PORT
+        --env-vars "PORT=$PORT"

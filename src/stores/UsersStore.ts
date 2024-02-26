@@ -7,9 +7,8 @@ import { persist, devtools } from "zustand/middleware";
 interface UserStoreState {
   user: Omit<User, "password"> | null;
   login: (user: Omit<User, "id"> | null) => Promise<void>;
+  register: (user: Omit<User, "id">) => Promise<void>;
   getUser: () => Omit<User, "password"> | null;
-  errorMessage: string | null;
-  resetMessage: () => void;
   resetUser: () => void;
   resetState: () => void;
 }
@@ -22,7 +21,6 @@ const useUserStore = create<UserStoreState>()(
         errorMessage: null,
         login: (user: Omit<User, "id"> | null) => {
           return new Promise<void>((resolve, reject) => {
-            set({ errorMessage: null });
             if (!user) {
               set({ user: null });
               resolve();
@@ -40,30 +38,38 @@ const useUserStore = create<UserStoreState>()(
                 })
                 .catch((error) => {
                   if (error.response) {
-                    set({
-                      errorMessage: error.response.data.message as string,
-                    });
+                    reject(error.response.data.message);
                   } else {
-                    set({ errorMessage: "Login Failed." });
+                    reject("Login Failed.");
                   }
-                  reject(error);
                 });
             }
           });
         },
-        getUser: () => get().user,
-        resetMessage: () => {
-          set({ errorMessage: null });
+        register: (user: Omit<User, "id">) => {
+          return new Promise<void>((resolve, reject) => {
+            api.users
+              .create(user)
+              .then(() => {
+                resolve();
+              })
+              .catch((error) => {
+                if (error.response) {
+                  reject(error.response.data.message);
+                } else {
+                  reject("Registration Failed.");
+                }
+              });
+          });
         },
+        getUser: () => get().user,
         resetUser: () => set({ user: null }),
         resetState: () => {
-          get().resetMessage();
           get().resetUser();
         },
       }),
       {
         name: "user-store",
-        partialize: (state) => ({ user: state.user }),
       }
     )
   )

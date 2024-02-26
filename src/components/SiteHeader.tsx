@@ -13,7 +13,7 @@ export function SiteHeader() {
       <UserModal id="login_modal" />
 
       <div className="join items-center">
-        <a href="https://github.com/HassanJbara/papers">
+        <a href="https://github.com/HassanJbara/papers" target="_blank">
           <button className="btn lg:btn-md btn-sm btn-ghost">
             <ReactSVG
               src="/icons/github.svg"
@@ -22,7 +22,7 @@ export function SiteHeader() {
           </button>
         </a>
 
-        <a href="https://xela.blog/">
+        <a href="https://xela.blog/" target="_blank">
           <button className="btn lg:btn-md btn-sm btn-ghost">
             <img
               alt="Xela Logo"
