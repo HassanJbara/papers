@@ -5,6 +5,8 @@ FROM node:21-alpine
 ENV PORT 80
 # vite uses variables during build time
 ARG VITE_BACKEND_URL
+ARG VITE_FRONTEND_USERNAME
+ARG VITE_FRONTEND_PASSWORD
 
 # Set the working directory in the container
 WORKDIR /app

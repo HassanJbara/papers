@@ -41,14 +41,12 @@ export function PDFPage(props: Props) {
   const highlights = getPaperHighlights(parseInt(props.pdfId));
   const { user } = useUserStore((state) => state);
 
-  const scrollViewerTo = useRef((highlight: any) => {
-    return highlight;
-  });
+  const scrollViewerTo = useRef<(highlight: IHighlight) => void>();
 
   const scrollToHighlightFromHash = () => {
     const highlight = getHighlightById(parseIdFromHash());
 
-    if (highlight) {
+    if (highlight && scrollViewerTo.current) {
       scrollViewerTo.current(highlight);
     }
   };
