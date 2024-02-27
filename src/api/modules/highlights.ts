@@ -1,13 +1,14 @@
 import type { AxiosPromise } from "axios";
 
 import { axiosAPI } from "@/api/axios";
-import type { Highlight, HighlightRequest } from "@/types";
+import type { HighlightRequest } from "@/types";
+import type { IHighlight } from "react-pdf-highlighter";
 
 const highlights = {
-  getAll: (): AxiosPromise<Array<Highlight>> => {
+  getAll: (): AxiosPromise<Array<IHighlight>> => {
     return axiosAPI.get("highlights");
   },
-  getOne: (id: number): AxiosPromise<Highlight> => {
+  getOne: (id: number): AxiosPromise<IHighlight> => {
     return axiosAPI.get("highlights/" + id.toString());
   },
   create: (highlight: HighlightRequest): AxiosPromise<void> => {
