@@ -1,6 +1,7 @@
 import { useUserStore } from "@/stores";
+import { AlertMessage } from "@/components";
+
 import { useState } from "react";
-import { ReactSVG } from "react-svg";
 
 interface Props {
   closeModal: () => void;
@@ -26,6 +27,7 @@ export function RegisterForm(props: Props) {
     setEmptyPassword(false);
     setEmptyRepeatPassword(false);
     setPasswordsDontMatch(false);
+    setErrorMessage(null);
   }
 
   function clearFields() {
@@ -148,17 +150,19 @@ export function RegisterForm(props: Props) {
       </div>
 
       {errorMessage && (
-        <div role="alert" className="alert alert-error mt-4">
-          <ReactSVG src="/icons/error.svg" className="h-5 w-5 fill-current" />
-          <span className="font-semibold">{errorMessage}</span>
-        </div>
+        <AlertMessage
+          errorMessage={errorMessage}
+          type="error"
+          closeAlert={() => setErrorMessage(null)}
+        />
       )}
 
       {success && (
-        <div role="alert" className="alert alert-success mt-4">
-          <ReactSVG src="/icons/check.svg" className="h-5 w-5 fill-current" />
-          <span className="font-semibold">Registration successful!</span>
-        </div>
+        <AlertMessage
+          errorMessage="User registered successfully!"
+          type="success"
+          closeAlert={() => setSuccess(false)}
+        />
       )}
 
       <div className="modal-action flex flex-row w-full justify-around">

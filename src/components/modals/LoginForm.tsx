@@ -1,6 +1,7 @@
 import { useUserStore } from "@/stores";
+import { AlertMessage } from "@/components";
+
 import { useState } from "react";
-import { ReactSVG } from "react-svg";
 
 interface Props {
   closeModal: () => void;
@@ -123,10 +124,11 @@ export function LoginForm(props: Props) {
       </div>
 
       {errorMessage && (
-        <div role="alert" className="alert alert-error mt-4">
-          <ReactSVG src="/icons/error.svg" className="h-5 w-5 fill-current" />
-          <span>{errorMessage}</span>
-        </div>
+        <AlertMessage
+          errorMessage={errorMessage}
+          type="error"
+          closeAlert={() => setErrorMessage(null)}
+        />
       )}
 
       <div className="modal-action flex flex-row w-full justify-around">

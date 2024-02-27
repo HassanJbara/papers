@@ -5,13 +5,14 @@ import {
   Highlight,
   Popup,
   AreaHighlight,
+  type IHighlight,
 } from "react-pdf-highlighter";
-
-import { HighlightOptions } from "@/components";
-import { Sidebar } from "@/components/sidebar";
-import { useHighlightsStore, usePDFStore } from "@/stores";
-import { getNewId, parseIdFromHash, resetHash, updateHighlight } from "@/utils";
 import { ReactSVG } from "react-svg";
+
+import { Sidebar } from "@/components/sidebar";
+import { HighlightOptions } from "@/components";
+import { useHighlightsStore, usePDFStore, useUserStore } from "@/stores";
+import { getNewId, parseIdFromHash, resetHash, updateHighlight } from "@/utils";
 
 interface Props {
   pdfId: string;
@@ -33,25 +34,39 @@ export function PDFPage(props: Props) {
     getPaperHighlights,
     setPaperHighlights,
     addHighlight,
+    addHighlightOffline,
     getHighlightById,
   } = useHighlightsStore((state) => state);
   const paper = usePDFStore((state) => state.getPaperById(props.pdfId));
   const highlights = getPaperHighlights(parseInt(props.pdfId));
+  const { user } = useUserStore((state) => state);
 
   const scrollViewerTo = useRef((highlight: any) => {
     return highlight;
   });
 
   const scrollToHighlightFromHash = () => {
-    const highlight = getHighlightById(
-      parseInt(props.pdfId),
-      parseIdFromHash()
-    );
+    const highlight = getHighlightById(parseIdFromHash());
 
     if (highlight) {
       scrollViewerTo.current(highlight);
     }
   };
+
+  function add(highlight: IHighlight) {
+    if (!user) {
+      addHighlightOffline(parseInt(props.pdfId), highlight);
+    } else {
+      addHighlight({
+        text: highlight.content.text || "",
+        comment: highlight.comment.text || "",
+        comment_emoji: highlight.comment.emoji || "",
+        image: highlight.content.image || "",
+        position: highlight.position,
+        pdf_id: parseInt(props.pdfId),
+      });
+    }
+  }
 
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
@@ -87,6 +102,7 @@ export function PDFPage(props: Props) {
                 src="/icons/error.svg"
                 className="w-10 h-10 fill-current"
               />
+
               <span className="font-bold text-2xl text-base-content">
                 Could not find the requested PDF
               </span>
@@ -112,11 +128,17 @@ export function PDFPage(props: Props) {
                 <HighlightOptions
                   onOpen={transformSelection}
                   onConfirm={(comment) => {
-                    addHighlight(parseInt(props.pdfId), {
-                      content,
-                      position,
-                      comment,
+                    add({
                       id: getNewId(),
+                      content: {
+                        text: content.text || "",
+                        image: content.image || "",
+                      },
+                      position: position,
+                      comment: {
+                        text: comment.text,
+                        emoji: comment.emoji,
+                      },
                     });
                     hideTipAndSelection();
                   }}

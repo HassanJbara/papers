@@ -1,4 +1,5 @@
 import { UserModal, AddPDFModal } from "@/components/modals";
+import { ReactSVG } from "react-svg";
 
 export function SiteHeader() {
   return (
@@ -7,13 +8,16 @@ export function SiteHeader() {
         Papers
       </h1>
 
+      <AddPDFModal id="add_pdf_modal" />
+
+      <UserModal id="login_modal" />
+
       <div className="join items-center">
         <a href="https://github.com/HassanJbara/papers" target="_blank">
           <button className="btn lg:btn-md btn-sm btn-ghost">
-            <img
-              alt="Github Logo"
+            <ReactSVG
               src="/icons/github.svg"
-              className="w-12 h-12 fill-base-content"
+              className="w-9 h-9 fill-base-content"
             />
           </button>
         </a>
@@ -23,14 +27,10 @@ export function SiteHeader() {
             <img
               alt="Xela Logo"
               src="/xela-logo.png"
-              className="lg:w-12 lg:h-12 h-10 w-12 fill-base-content"
+              className="lg:w-10 lg:h-10 h-10 w-12"
             />
           </button>
         </a>
-
-        <AddPDFModal id="add_pdf_modal" />
-
-        <UserModal id="login_modal" />
       </div>
     </div>
   );

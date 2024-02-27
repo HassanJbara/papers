@@ -8,7 +8,9 @@ interface PDFStoreState {
   papers: Paper[];
   setPapers: (papers: Paper[]) => void;
   addPaper: (paper: PaperRequest) => void;
-  addPaperOffline: (paper: Omit<Paper, "id" | "user_id">) => void;
+  addPaperOffline: (
+    paper: Omit<Paper, "id" | "user_id" | "highlights">
+  ) => void;
   removePaper: (paperId: number) => void;
   removePaperOffline: (paperId: number) => void;
   updatePaper: (id: number, paper: PaperRequest) => void;
@@ -37,7 +39,9 @@ const usePDFStore = create<PDFStoreState>()(
             console.log(error);
           }
         },
-        addPaperOffline: (paper: Omit<Paper, "id" | "user_id">) => {
+        addPaperOffline: (
+          paper: Omit<Paper, "id" | "user_id" | "highlights">
+        ) => {
           set((state) => ({
             papers: [
               ...state.papers,
@@ -45,6 +49,7 @@ const usePDFStore = create<PDFStoreState>()(
                 ...paper,
                 id: state.papers.length + 1,
                 user_id: null,
+                highlights: [],
               },
             ],
           }));
