@@ -40,11 +40,6 @@ export function MainPage() {
     <div className="h-screen flex flex-col items-center p-10">
       <SiteHeader />
 
-      <p className="md:w-1/2 my-10 text-2xl font-semibold text-base-content">
-        A simple and functional open-source PDF reader. For more information on
-        the project, check out the GitHub repository.
-      </p>
-
       {papers.length === 0 && (
         <div className="h-full w-full flex flex-col items-center gap-10 justify-center">
           <ReactSVG
