@@ -78,6 +78,7 @@ export function EditPDFModal(props: Props) {
           ? categories.find((c) => c.id === categoryId) || null
           : null,
         tags: tagId ? tags.filter((t) => t.id === tagId) : [],
+        highlights: props.paper.highlights,
       });
     } else {
       updatePaper(props.paper.id, {
