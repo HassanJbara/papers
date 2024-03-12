@@ -4,9 +4,13 @@ import { ReactSVG } from "react-svg";
 export function SiteHeader() {
   return (
     <div className="flex flex-row items-center justify-center gap-4 w-full">
-      <h1 className="font-bold text-5xl text-center text-base-content">
-        Papers
-      </h1>
+      <div className="indicator">
+        <span className="indicator-item badge badge-error badge-lg">alpha</span>
+
+        <h1 className="font-bold text-5xl text-center text-base-content">
+          Papers
+        </h1>
+      </div>
 
       <AddPDFModal id="add_pdf_modal" />
 
