@@ -44,7 +44,7 @@ const useHighlightsStore = create<HighlightsStoreState>()(
         },
         addHighlightOffline: (paperId: number, highlight: IHighlight) =>
           set((state) => ({
-            highlights: state.highlights,
+            highlights: [...state.highlights, highlight],
             papersHighlights: [
               ...state.papersHighlights.filter((h) => h.paperId !== paperId),
               {

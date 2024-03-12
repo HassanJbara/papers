@@ -18,7 +18,6 @@ const useUserStore = create<UserStoreState>()(
     persist(
       (set, get) => ({
         user: null,
-        errorMessage: null,
         login: (user: Omit<User, "id"> | null) => {
           return new Promise<void>((resolve, reject) => {
             if (!user) {
